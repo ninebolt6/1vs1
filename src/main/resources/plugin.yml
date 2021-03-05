@@ -1,0 +1,8 @@
+main: ${project.groupId}.OneVsOne
+name: ${project.name}
+version: ${project.version}
+api-version: 1.16
+author: ninebolt.net
+
+commands:
+ 1vs1:

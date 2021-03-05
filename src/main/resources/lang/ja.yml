@@ -1,0 +1,9 @@
+#ゲーム内メッセージ
+prefix: "[1vs1] "
+notPermitted: "権限がありません"
+cannotExecuteFromConsole: "このコマンドはコンソールから実行できません"
+arenaNotFound: "アリーナ %arena% が見つかりませんでした"
+arenaAlreadyExists: "アリーナ %arena% はすでに存在しています"
+
+#エラーメッセージ
+arenaDeserializeError: "アリーナファイル %fileName% の読み込みに失敗しました。ファイルのフォーマットを確認してください。"
