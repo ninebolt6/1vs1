@@ -13,6 +13,7 @@ import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.util.Messages;
 
 public class ArenaManager {
+
 	private static Map<String, Arena> arenaMap;
 	private static File arenaDir;
 
@@ -54,7 +55,7 @@ public class ArenaManager {
 		return arenaMap.get(name);
 	}
 
-	public static final List<Arena> getArenaList() {
+	public static List<Arena> getArenaList() {
 		return new ArrayList<Arena>(arenaMap.values());
 	}
 
