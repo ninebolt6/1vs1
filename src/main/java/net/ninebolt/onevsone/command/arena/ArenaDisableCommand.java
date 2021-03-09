@@ -32,12 +32,13 @@ public class ArenaDisableCommand implements ISubCommand {
 			return true;
 		}
 
-		if(!ArenaManager.contains(args[2])) {
+		ArenaManager manager = ArenaManager.getInstance();
+		if(!manager.contains(args[2])) {
 			sender.sendMessage(Messages.arenaNotFound(args[2]));
 			return true;
 		}
 
-		Arena arena = ArenaManager.getArena(args[2]);
+		Arena arena = manager.getArena(args[2]);
 		if(!arena.isEnabled()) {
 			sender.sendMessage(ChatColor.GREEN + "そのアリーナはすでに無効になっています！");
 			return true;

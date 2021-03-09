@@ -37,12 +37,13 @@ public class ArenaSetKitCommand implements ISubCommand {
 			return true;
 		}
 
-		if(!ArenaManager.contains(args[3])) {
+		ArenaManager manager = ArenaManager.getInstance();
+		if(!manager.contains(args[3])) {
 			sender.sendMessage(Messages.arenaNotFound(args[3]));
 			return true;
 		}
 
-		Arena arena = ArenaManager.getArena(args[3]);
+		Arena arena = manager.getArena(args[3]);
 		arena.setInventory(((Player)sender).getInventory());
 		//arena.save();
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[3] + " のキットを設定しました");

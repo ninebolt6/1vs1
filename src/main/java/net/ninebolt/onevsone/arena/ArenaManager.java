@@ -14,11 +14,14 @@ import net.ninebolt.onevsone.util.Messages;
 
 public class ArenaManager {
 
+	private static final ArenaManager instance = new ArenaManager(); // Singleton
+	private static final String arenaDirPath = "/arena/";
+
 	private static Map<String, Arena> arenaMap;
 	private static File arenaDir;
 
-	public static void initArenas(File arenaFileDir) {
-		arenaDir = arenaFileDir;
+	private ArenaManager() {
+		arenaDir = new File(OneVsOne.getInstance().getDataFolder(), arenaDirPath);
 		if(!arenaDir.exists()) {
 			arenaDir.mkdirs();
 		}
@@ -44,22 +47,22 @@ public class ArenaManager {
 		}
 	}
 
-	public static File getArenaDir() {
-		return arenaDir;
+	public static ArenaManager getInstance() {
+		return instance;
 	}
 
-	public static Arena getArena(String name) {
+	public Arena getArena(String name) {
 		if(!arenaMap.containsKey(name)) {
 			return null;
 		}
 		return arenaMap.get(name);
 	}
 
-	public static List<Arena> getArenaList() {
+	public List<Arena> getArenaList() {
 		return new ArrayList<Arena>(arenaMap.values());
 	}
 
-	public static boolean contains(String name) {
+	public boolean contains(String name) {
 		if(getArena(name) != null) {
 			return true;
 		} else {
@@ -67,12 +70,13 @@ public class ArenaManager {
 		}
 	}
 
-	public static void create(String name) {
-		Arena arena = new Arena(name);
+	public void save(Arena arena, String name) {
+		if(arena == null) {
+			// error
+		}
 		File file = new File(arenaDir, name+".yml");
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-		arenaMap.put(name, arena);
 		config.set("arena", arena);
 		try {
 			config.save(file);
@@ -81,7 +85,14 @@ public class ArenaManager {
 		}
 	}
 
-	public static void delete(String name) {
+	public void create(String name) {
+		Arena arena = new Arena(name);
+
+		arenaMap.put(name, arena);
+		save(arena, name);
+	}
+
+	public void delete(String name) {
 		arenaMap.remove(name);
 	}
 

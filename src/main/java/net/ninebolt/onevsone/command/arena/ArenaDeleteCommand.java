@@ -29,13 +29,14 @@ public class ArenaDeleteCommand implements ISubCommand {
 			return true;
 		}
 
-		if(!ArenaManager.contains(args[2])) {
+		ArenaManager manager = ArenaManager.getInstance();
+		if(!manager.contains(args[2])) {
 			sender.sendMessage(Messages.arenaNotFound(args[2]));
 			return true;
 		}
 
 		//Arena arena = ArenaManager.getArena(args[2]);
-		ArenaManager.delete(args[2]);
+		manager.delete(args[2]);
 
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[2] + " を削除しました");
 		return true;

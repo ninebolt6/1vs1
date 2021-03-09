@@ -8,7 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.command.GameGUICommand;
 import net.ninebolt.onevsone.command.RootCommand;
 import net.ninebolt.onevsone.event.CacheUniqueIdListener;
@@ -51,7 +50,6 @@ public class OneVsOne extends JavaPlugin {
 		Messages.initExternalConfig(new File(getDataFolder(), "/lang/"), getConfig().getString("lang"));
 
 		// アリーナの初期化
-		ArenaManager.initArenas(new File(getDataFolder(), "/arena/"));
 		MatchManager.initMatches();
 
 		// イベントリスナーの登録

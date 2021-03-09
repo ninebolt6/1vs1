@@ -28,12 +28,13 @@ public class ArenaCreateCommand implements ISubCommand {
 			return true;
 		}
 
-		if(ArenaManager.contains(args[2])) {
+		ArenaManager manager = ArenaManager.getInstance();
+		if(manager.contains(args[2])) {
 			sender.sendMessage(ChatColor.RED + "そのアリーナはすでに存在しています");
 			return true;
 		}
 
-		ArenaManager.create(args[2]);
+		manager.create(args[2]);
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[2] + " を作成しました");
 		return true;
 	}

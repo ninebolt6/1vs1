@@ -13,12 +13,14 @@ import net.ninebolt.onevsone.arena.ArenaManager;
 public class MatchManager {
 	private static List<Match> matches;
 	private static Map<Player, Match> playerMap;
+	private static ArenaManager manager;
 
 	public static void initMatches() {
 		matches = new ArrayList<Match>();
 		playerMap = new HashMap<Player, Match>();
+		manager = ArenaManager.getInstance();
 
-		for(Arena arena : ArenaManager.getArenaList()) {
+		for(Arena arena : manager.getArenaList()) {
 			matches.add(new Match(arena));
 		}
 	}

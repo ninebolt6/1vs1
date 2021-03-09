@@ -26,16 +26,18 @@ public class MatchSelector implements Listener {
 	private static final String INVENTORY_NAME = "&bGame Selector";
 
 	private static Map<Player, InventoryView> openList = new HashMap<Player, InventoryView>();
+	private ArenaManager manager;
 	private Inventory inventory;
 
 	public MatchSelector() {
+		manager = ArenaManager.getInstance();
 		inventory = Bukkit.createInventory(null, ROW*9, Messages.getColoredText(INVENTORY_NAME));
 		initContents();
 		inventory.addItem(createItem(Material.STONE, "test", "testLore", "testLore2"));
 	}
 
 	public void initContents() {
-		for(Arena arena : ArenaManager.getArenaList()) {
+		for(Arena arena : manager.getArenaList()) {
 			ItemStack arenaItem;
 			if(arena.isEnabled()) {
 				arenaItem = createItem(Material.GREEN_WOOL, arena.getDisplayName());

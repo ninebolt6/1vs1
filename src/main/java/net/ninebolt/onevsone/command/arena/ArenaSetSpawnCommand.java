@@ -37,7 +37,8 @@ public class ArenaSetSpawnCommand implements ISubCommand {
 			return true;
 		}
 
-		if(!ArenaManager.contains(args[4])) {
+		ArenaManager manager = ArenaManager.getInstance();
+		if(!manager.contains(args[4])) {
 			sender.sendMessage(Messages.arenaNotFound(args[4]));
 			return true;
 		}
@@ -55,7 +56,7 @@ public class ArenaSetSpawnCommand implements ISubCommand {
 			return true;
 		}
 
-		Arena arena = ArenaManager.getArena(args[4]);
+		Arena arena = manager.getArena(args[4]);
 		arena.setSpawnLoc(((Player)sender).getLocation(), spawnNumber);
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[4] + " のスポーン" + args[3] + "を設定しました");
 		return true;
