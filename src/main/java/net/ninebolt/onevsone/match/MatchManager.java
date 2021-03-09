@@ -11,36 +11,47 @@ import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
 
 public class MatchManager {
+
+	private static final MatchManager instance = new MatchManager();
+
 	private static List<Match> matches;
 	private static Map<Player, Match> playerMap;
-	private static ArenaManager manager;
+	private static ArenaManager arenaManager;
 
-	public static void initMatches() {
+	private MatchManager() {
 		matches = new ArrayList<Match>();
 		playerMap = new HashMap<Player, Match>();
-		manager = ArenaManager.getInstance();
+		arenaManager = ArenaManager.getInstance();
+		initMatches();
+	}
 
-		for(Arena arena : manager.getArenaList()) {
+	public static MatchManager getInstance() {
+		return instance;
+	}
+
+	protected void initMatches() {
+		matches.clear();
+		for(Arena arena : arenaManager.getArenaList()) {
 			matches.add(new Match(arena));
 		}
 	}
 
-	public static List<Match> getMatches() {
+	public List<Match> getMatches() {
 		return matches;
 	}
 
-	public static boolean isPlaying(Player player) {
+	public boolean isPlaying(Player player) {
 		return playerMap.containsKey(player);
 	}
 
-	public static Match getMatch(Player player) {
+	public Match getMatch(Player player) {
 		if(!isPlaying(player)) {
 			return null;
 		}
 		return getPlayerMap().get(player);
 	}
 
-	public static Map<Player, Match> getPlayerMap() {
+	public Map<Player, Match> getPlayerMap() {
 		return playerMap;
 	}
 }

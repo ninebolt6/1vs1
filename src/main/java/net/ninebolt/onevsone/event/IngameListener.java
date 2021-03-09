@@ -16,15 +16,13 @@ import net.ninebolt.onevsone.match.MatchManager;
 public class IngameListener implements Listener {
 
 	@EventHandler
-	public void onBreak(BlockBreakEvent event)
-	{
+	public void onBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
+		MatchManager manager = MatchManager.getInstance();
 
-		if(MatchManager.isPlaying(player))
-		{
-			Match match = MatchManager.getMatch(player);
-			if(match.getState() == ArenaState.INGAME)
-			{
+		if(manager.isPlaying(player)) {
+			Match match = manager.getMatch(player);
+			if(match.getState() == ArenaState.INGAME) {
 				event.setCancelled(true);
 			}
 		}
@@ -33,8 +31,10 @@ public class IngameListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onDeath(PlayerDeathEvent event) {
 		Player player = event.getEntity();
-		if(MatchManager.isPlaying(player)) {
-			Match match = MatchManager.getMatch(player);
+		MatchManager manager = MatchManager.getInstance();
+
+		if(manager.isPlaying(player)) {
+			Match match = manager.getMatch(player);
 			if(match.getState().equals(ArenaState.INGAME)) {
 				event.getDrops().clear();
 			}
@@ -43,10 +43,12 @@ public class IngameListener implements Listener {
 
 	@EventHandler
 	public void onDamageWhileCountdown(EntityDamageEvent event) {
+		MatchManager manager = MatchManager.getInstance();
+
 		if(event.getEntity() instanceof Player) {
 			Player defender = (Player) event.getEntity();
-			if(MatchManager.isPlaying(defender)) {
-				Match match = MatchManager.getMatch(defender);
+			if(manager.isPlaying(defender)) {
+				Match match = manager.getMatch(defender);
 				if(match.getState().equals(ArenaState.WAITING)) {
 					event.setCancelled(true);
 				}
@@ -57,8 +59,10 @@ public class IngameListener implements Listener {
 	@EventHandler
 	public void onQuitWhileIngame(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-		if(MatchManager.isPlaying(player)) {
-			Match match = MatchManager.getMatch(player);
+		MatchManager manager = MatchManager.getInstance();
+
+		if(manager.isPlaying(player)) {
+			Match match = manager.getMatch(player);
 			match.stop();
 		}
 	}

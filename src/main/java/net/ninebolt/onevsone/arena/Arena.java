@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.Inventory;
 
@@ -76,9 +77,9 @@ public class Arena implements ConfigurationSerializable {
 	}
 
 	public static Arena deserialize(File file) {
-		/*YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-		Arena arena = config.getObject("arena", Arena.class);*/
-		return null;
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+		Arena arena = config.getObject("arena", Arena.class);
+		return arena;
 	}
 
 }

@@ -49,9 +49,6 @@ public class OneVsOne extends JavaPlugin {
 		}
 		Messages.initExternalConfig(new File(getDataFolder(), "/lang/"), getConfig().getString("lang"));
 
-		// アリーナの初期化
-		MatchManager.initMatches();
-
 		// イベントリスナーの登録
 		getServer().getPluginManager().registerEvents(new MatchSelector(), this);
 		getServer().getPluginManager().registerEvents(new CacheUniqueIdListener(), this);
@@ -63,15 +60,15 @@ public class OneVsOne extends JavaPlugin {
 	}
 
 	public void onDisable() {
+		MatchManager matchManager = MatchManager.getInstance();
 		// すべてのゲームを安全に無効化
-		for(Match match : MatchManager.getMatches()) {
+		for(Match match : matchManager.getMatches()) {
 			match.stop();
 		}
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-	{
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equals("1vs1")) {
 			if(args.length == 0) {
 				return guiCommand.execute(sender, label);

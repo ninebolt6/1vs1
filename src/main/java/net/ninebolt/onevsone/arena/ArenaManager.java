@@ -21,13 +21,15 @@ public class ArenaManager {
 	private static File arenaDir;
 
 	private ArenaManager() {
+		arenaMap = new HashMap<String, Arena>();
 		arenaDir = new File(OneVsOne.getInstance().getDataFolder(), arenaDirPath);
 		if(!arenaDir.exists()) {
 			arenaDir.mkdirs();
 		}
+		initArenas();
+	}
 
-		arenaMap = new HashMap<String, Arena>();
-
+	protected void initArenas() {
 		for(File file : arenaDir.listFiles()) {
 			String fileName = file.getName();
 			if(file.isFile() && fileName.endsWith(".yml")) {
