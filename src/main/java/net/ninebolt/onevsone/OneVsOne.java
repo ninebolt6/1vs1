@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.command.GameGUICommand;
 import net.ninebolt.onevsone.command.RootCommand;
 import net.ninebolt.onevsone.event.CacheUniqueIdListener;
@@ -21,9 +22,10 @@ import net.ninebolt.onevsone.util.UUIDCache;
 public class OneVsOne extends JavaPlugin {
 	private static OneVsOne instance;
 	private static UUIDCache cache;
+	private static ArenaManager arenaManager;
 
-	protected RootCommand rootCommand;
-	protected GameGUICommand guiCommand;
+	private RootCommand rootCommand;
+	private GameGUICommand guiCommand;
 
 	public static OneVsOne getInstance() {
 		return instance;
@@ -31,13 +33,8 @@ public class OneVsOne extends JavaPlugin {
 
 	public void onEnable() {
 		instance = this;
-		cache = new UUIDCache(getDataFolder());
 
-		// コマンドクラスの初期化
-		rootCommand = new RootCommand();
-		guiCommand = new GameGUICommand();
-
-		// コンフィグの初期設定
+		// コンフィグの設定
 		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
 		try {
@@ -49,6 +46,13 @@ public class OneVsOne extends JavaPlugin {
 		}
 		Messages.initExternalConfig(new File(getDataFolder(), "/lang/"), getConfig().getString("lang"));
 
+		// 各種クラスのインスタンス生成
+		cache = new UUIDCache(getDataFolder());
+		arenaManager = new ArenaManager(new File(getDataFolder(), "/arena/"));
+
+		rootCommand = new RootCommand();
+		guiCommand = new GameGUICommand();
+
 		// イベントリスナーの登録
 		getServer().getPluginManager().registerEvents(new MatchSelector(), this);
 		getServer().getPluginManager().registerEvents(new CacheUniqueIdListener(), this);
@@ -57,6 +61,10 @@ public class OneVsOne extends JavaPlugin {
 
 	public static UUIDCache getUUIDCache() {
 		return cache;
+	}
+
+	public static ArenaManager getArenaManager() {
+		return arenaManager;
 	}
 
 	public void onDisable() {

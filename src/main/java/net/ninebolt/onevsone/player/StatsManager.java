@@ -2,7 +2,11 @@ package net.ninebolt.onevsone.player;
 
 public class StatsManager {
 
-	public static Stats getNewStats(String uuid, String playerName) {
+	public static Stats getStats(String uuid) {
 		return null;
+	}
+
+	public static void save(String uuid, Stats stats) {
+
 	}
 }

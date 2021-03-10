@@ -16,8 +16,8 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
-import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.util.Messages;
 
 public class MatchSelector implements Listener {
@@ -26,18 +26,16 @@ public class MatchSelector implements Listener {
 	private static final String INVENTORY_NAME = "&bGame Selector";
 
 	private static Map<Player, InventoryView> openList = new HashMap<Player, InventoryView>();
-	private ArenaManager manager;
 	private Inventory inventory;
 
 	public MatchSelector() {
-		manager = ArenaManager.getInstance();
 		inventory = Bukkit.createInventory(null, ROW*9, Messages.getColoredText(INVENTORY_NAME));
 		initContents();
-		inventory.addItem(createItem(Material.STONE, "test", "testLore", "testLore2"));
+		//inventory.addItem(createItem(Material.STONE, "test", "testLore", "testLore2"));
 	}
 
 	public void initContents() {
-		for(Arena arena : manager.getArenaList()) {
+		for(Arena arena : OneVsOne.getArenaManager().getArenaList()) {
 			ItemStack arenaItem;
 			if(arena.isEnabled()) {
 				arenaItem = createItem(Material.GREEN_WOOL, arena.getDisplayName());

@@ -14,27 +14,24 @@ import net.ninebolt.onevsone.util.Messages;
 
 public class ArenaManager {
 
-	private static final ArenaManager instance = new ArenaManager(); // Singleton
-	private static final String arenaDirPath = "/arena/";
+	private Map<String, Arena> arenaMap;
+	private File arenaFolder;
 
-	private static Map<String, Arena> arenaMap;
-	private static File arenaDir;
-
-	private ArenaManager() {
+	// コンストラクタに依存しない形で作れるのならSingleton化してもいいかも？
+	public ArenaManager(File arenaFolder) {
 		arenaMap = new HashMap<String, Arena>();
-		arenaDir = new File(OneVsOne.getInstance().getDataFolder(), arenaDirPath);
-		if(!arenaDir.exists()) {
-			arenaDir.mkdirs();
+		this.arenaFolder = arenaFolder;
+		if(!arenaFolder.exists()) {
+			arenaFolder.mkdirs();
 		}
 		initArenas();
 	}
 
 	protected void initArenas() {
-		for(File file : arenaDir.listFiles()) {
+		for(File file : arenaFolder.listFiles()) {
 			String fileName = file.getName();
 			if(file.isFile() && fileName.endsWith(".yml")) {
 				Arena arena = Arena.deserialize(file);
-
 				if(arena == null) {
 					OneVsOne.getInstance().getLogger().info(Messages.arenaDeserializeError(fileName));
 					continue;
@@ -47,10 +44,6 @@ public class ArenaManager {
 				}
 			}
 		}
-	}
-
-	public static ArenaManager getInstance() {
-		return instance;
 	}
 
 	public Arena getArena(String name) {
@@ -76,7 +69,7 @@ public class ArenaManager {
 		if(arena == null) {
 			// error
 		}
-		File file = new File(arenaDir, name+".yml");
+		File file = new File(arenaFolder, name+".yml");
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
 		config.set("arena", arena);

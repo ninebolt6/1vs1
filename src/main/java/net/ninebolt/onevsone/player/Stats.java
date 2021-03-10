@@ -1,58 +1,38 @@
 package net.ninebolt.onevsone.player;
 
-import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Stats implements Serializable {
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-	private static final long serialVersionUID = 1L;
+public class Stats implements ConfigurationSerializable {
 
+	private String uuid;
 	private String playerName;
-	//private String uuid;
 	private int kills;
 	private int deaths;
 	private int wins;
 	private int defeats;
 
 	public Stats(String uuid, String playerName) {
-		//super(new File(OneVsOne.getInstance().getDataFolder(), "/arena/" + uuid + ".yml"));
+		this.uuid = uuid;
 		this.playerName = playerName;
-		//this.uuid = uuid;
 		this.kills = 0;
 		this.deaths = 0;
 		this.wins = 0;
 		this.defeats = 0;
 	}
 
-	public Stats(String uuid) {
-		//super(new File(OneVsOne.getInstance().getDataFolder(), "/arena/" + uuid + ".yml"));
-		//this.playerName = playerName;
-		//this.uuid = uuid;
-		this.kills = 0;
-		this.deaths = 0;
-		this.wins = 0;
-		this.defeats = 0;
-	}
-
-	/*public String getUUID() {
+	public String getUUID() {
 		return uuid;
-	}*/
+	}
 
 	public String getPlayerName() {
 		return playerName;
 	}
 
 	public void setPlayerName(String playerName) {
-		// TODO 自動生成されたメソッド・スタブ
-
-	}
-
-	public static Stats getStats(String uuid2) {
-		return null;
-	}
-
-	public static boolean exists(String string) {
-		// TODO
-		return false;
+		this.playerName = playerName;
 	}
 
 	public int getWins() {
@@ -87,8 +67,15 @@ public class Stats implements Serializable {
 		deaths += num;
 	}
 
-	public void save() {
-
+	@Override
+	public Map<String, Object> serialize() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("playerName", playerName);
+		map.put("kills", kills);
+		map.put("deaths", deaths);
+		map.put("wins", wins);
+		map.put("defeats", defeats);
+		return map;
 	}
 
 }

@@ -3,6 +3,7 @@ package net.ninebolt.onevsone.command.arena;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.command.ISubCommand;
@@ -32,7 +33,7 @@ public class ArenaEnableCommand implements ISubCommand {
 			return true;
 		}
 
-		ArenaManager manager = ArenaManager.getInstance();
+		ArenaManager manager = OneVsOne.getArenaManager();
 		if(!manager.contains(args[2])) {
 			sender.sendMessage(Messages.arenaNotFound(args[2]));
 			return true;

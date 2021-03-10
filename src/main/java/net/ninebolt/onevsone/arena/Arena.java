@@ -19,7 +19,6 @@ public class Arena implements ConfigurationSerializable {
 	private Location[] spawns;
 
 	public Arena(String name) {
-		//super(new File(ArenaManager.getArenaDir(), name + ".yml"));
 		displayName = name;
 		enabled = false;
 		inventory = null;

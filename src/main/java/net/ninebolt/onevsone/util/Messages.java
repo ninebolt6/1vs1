@@ -11,26 +11,17 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import net.ninebolt.onevsone.Configurable;
 import net.ninebolt.onevsone.player.Stats;
 
-public class Messages extends Configurable {
+public class Messages {
 
 	private static YamlConfiguration externalConfig;
 	private static YamlConfiguration internalConfig;
 	private static File langFolder;
 
-	public Messages(File file) {
-		super(file);
-	}
-
-	public static String getColoredText(String text) {
-		return ChatColor.translateAlternateColorCodes('&', text);
-	}
-
 	public static void initInternalConfig(InputStream input) throws FileNotFoundException, UnsupportedEncodingException {
 		if(input == null) {
-			throw new FileNotFoundException("Internal language file is not found. Check if your JAR file includes a language file.");
+			throw new FileNotFoundException("Internal language file not found. Check if your JAR file includes a language file.");
 		}
 		internalConfig = YamlConfiguration.loadConfiguration(new BufferedReader(new InputStreamReader(input, "UTF-8")));
 	}
@@ -47,6 +38,10 @@ public class Messages extends Configurable {
 
 	public static void reloadExternalConfig(String language) {
 		initExternalConfig(langFolder, language);
+	}
+
+	public static String getColoredText(String text) {
+		return ChatColor.translateAlternateColorCodes('&', text);
 	}
 
 	public static String getString(String path) {

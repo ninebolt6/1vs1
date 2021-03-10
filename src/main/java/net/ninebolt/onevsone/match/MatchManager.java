@@ -7,12 +7,13 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
+import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
 
 public class MatchManager {
 
-	private static final MatchManager instance = new MatchManager();
+	private static final MatchManager INSTANCE = new MatchManager(); // Singleton
 
 	private static List<Match> matches;
 	private static Map<Player, Match> playerMap;
@@ -21,16 +22,17 @@ public class MatchManager {
 	private MatchManager() {
 		matches = new ArrayList<Match>();
 		playerMap = new HashMap<Player, Match>();
-		arenaManager = ArenaManager.getInstance();
+		arenaManager = OneVsOne.getArenaManager();
 		initMatches();
+
+		System.out.println("DEBUG: MatchManagerのインスタンスが作られました");
 	}
 
 	public static MatchManager getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 
 	protected void initMatches() {
-		matches.clear();
 		for(Arena arena : arenaManager.getArenaList()) {
 			matches.add(new Match(arena));
 		}

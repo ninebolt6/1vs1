@@ -3,6 +3,7 @@ package net.ninebolt.onevsone.command.arena;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.command.ISubCommand;
 
@@ -28,7 +29,7 @@ public class ArenaCreateCommand implements ISubCommand {
 			return true;
 		}
 
-		ArenaManager manager = ArenaManager.getInstance();
+		ArenaManager manager = OneVsOne.getArenaManager();
 		if(manager.contains(args[2])) {
 			sender.sendMessage(ChatColor.RED + "そのアリーナはすでに存在しています");
 			return true;

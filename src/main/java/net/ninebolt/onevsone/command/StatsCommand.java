@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.player.Stats;
+import net.ninebolt.onevsone.player.StatsManager;
 import net.ninebolt.onevsone.util.Messages;
 
 public class StatsCommand implements ISubCommand {
@@ -36,7 +37,7 @@ public class StatsCommand implements ISubCommand {
 				return true;
 			}
 
-			Stats stats = Stats.getStats(((Player)sender).getUniqueId().toString());
+			Stats stats = StatsManager.getStats(((Player)sender).getUniqueId().toString());
 			sender.sendMessage(Messages.formattedStats(stats));
 			return true;
 
@@ -53,7 +54,7 @@ public class StatsCommand implements ISubCommand {
 				return true;
 			}
 
-			Stats stats = Stats.getStats(uuid);
+			Stats stats = StatsManager.getStats(uuid);
 			sender.sendMessage(Messages.formattedStats(stats));
 			return true;
 
