@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import net.ninebolt.onevsone.OneVsOne;
+import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.command.ISubCommand;
 
@@ -35,7 +36,8 @@ public class ArenaCreateCommand implements ISubCommand {
 			return true;
 		}
 
-		manager.create(args[2]);
+		Arena arena = new Arena(args[2]);
+		manager.register(args[2], arena);
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[2] + " を作成しました");
 		return true;
 	}

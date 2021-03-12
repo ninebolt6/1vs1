@@ -3,35 +3,36 @@ package net.ninebolt.onevsone.arena;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.Inventory;
-
-import net.ninebolt.onevsone.match.Match;
 
 public class Arena implements ConfigurationSerializable {
 
 	private String displayName;
 	private boolean enabled;
 	private Inventory inventory;
-	private Location[] spawns;
+	private SpawnLocation spawns;
 
 	public Arena(String name) {
 		displayName = name;
 		enabled = false;
 		inventory = null;
-		spawns = null;
+		spawns = new SpawnLocation(null, null);
 	}
 
 	public Arena(Map<String, Object> map) {
 		displayName = (String) map.get("displayName");
 		enabled = (boolean) map.get("enabled");
 		inventory = (Inventory) map.get("inventory");
-		spawns = (Location[]) map.get("spawns");
+		spawns = (SpawnLocation) map.get("spawns");
 	}
 
 	public String getDisplayName() {
 		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	public boolean isEnabled() {
@@ -50,24 +51,12 @@ public class Arena implements ConfigurationSerializable {
 		this.inventory = inventory;
 	}
 
-	public Location getSpawnLoc(int playerNum) {
-		if(playerNum != Match.PLAYER_ONE && playerNum != Match.PLAYER_TWO) {
-			throw new NumberFormatException();
-		} else {
-			return spawns[playerNum];
-		}
-	}
-
-	public Location[] getSpawns() {
+	public SpawnLocation getSpawnLocations() {
 		return spawns;
 	}
 
-	public void setSpawnLoc(Location loc, int playerNum) {
-		if(playerNum != Match.PLAYER_ONE && playerNum != Match.PLAYER_TWO) {
-			throw new NumberFormatException();
-		} else {
-			spawns[playerNum] = loc;
-		}
+	public void setSpawnLocation(SpawnLocation spawns) {
+		this.spawns = spawns;
 	}
 
 	@Override

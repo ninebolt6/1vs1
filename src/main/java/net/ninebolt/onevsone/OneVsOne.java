@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
+import net.ninebolt.onevsone.arena.SpawnLocation;
 import net.ninebolt.onevsone.command.GameGUICommand;
 import net.ninebolt.onevsone.command.RootCommand;
 import net.ninebolt.onevsone.event.CacheUniqueIdListener;
@@ -29,10 +30,6 @@ public class OneVsOne extends JavaPlugin {
 
 	private RootCommand rootCommand;
 	private GameGUICommand guiCommand;
-
-	static {
-		ConfigurationSerialization.registerClass(Arena.class);
-	}
 
 	public static OneVsOne getInstance() {
 		return instance;
@@ -53,7 +50,9 @@ public class OneVsOne extends JavaPlugin {
 			return;
 		}
 		Messages.initExternalConfig(new File(getDataFolder(), "/lang/"), getConfig().getString("lang"));
-		//ConfigurationSerialization.registerClass(Arena.class);
+
+		ConfigurationSerialization.registerClass(SpawnLocation.class);
+		ConfigurationSerialization.registerClass(Arena.class);
 		ConfigurationSerialization.registerClass(Stats.class);
 
 		// 各種クラスのインスタンス生成

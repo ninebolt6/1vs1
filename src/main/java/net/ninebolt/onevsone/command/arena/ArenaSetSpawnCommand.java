@@ -27,7 +27,7 @@ public class ArenaSetSpawnCommand implements ISubCommand {
 
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
-		// /1vs1 arena set spawn [arenaName]
+		// /1vs1 arena set spawn [1/2] [arenaName]
 		if(!(sender instanceof Player)) {
 			sender.sendMessage(Messages.cannotExecuteFromConsole());
 			return true;
@@ -44,7 +44,7 @@ public class ArenaSetSpawnCommand implements ISubCommand {
 			return true;
 		}
 
-		int spawnNumber;
+		int spawnNumber = 0;
 		try {
 			spawnNumber = Integer.parseInt(args[3]);
 		} catch(NumberFormatException e) {
@@ -52,13 +52,14 @@ public class ArenaSetSpawnCommand implements ISubCommand {
 			return true;
 		}
 
-		if(spawnNumber >= 0 || spawnNumber <= 3) {
-			sender.sendMessage("Format error: " + args[3]);
+		if(spawnNumber < 1 || spawnNumber > 2) {
+			sender.sendMessage("Format error2: " + args[3]);
 			return true;
 		}
 
 		Arena arena = manager.getArena(args[4]);
-		arena.setSpawnLoc(((Player)sender).getLocation(), spawnNumber);
+		arena.getSpawnLocations().setSpawn(spawnNumber, ((Player)sender).getLocation());
+		manager.save(arena, args[4]);
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[4] + " のスポーン" + args[3] + "を設定しました");
 		return true;
 	}

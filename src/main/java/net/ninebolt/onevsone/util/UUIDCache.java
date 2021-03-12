@@ -21,6 +21,7 @@ public class UUIDCache {
 				e.printStackTrace();
 			}
 		}
+		this.cache = YamlConfiguration.loadConfiguration(cacheFile);
 	}
 
 	public String getUUIDByName(String playerName) {

@@ -12,7 +12,7 @@ import net.ninebolt.onevsone.util.Messages;
 
 public class ArenaSetKitCommand implements ISubCommand {
 
-	private static final String NAME = "kit";
+	private static final String NAME = "inv";
 	private static final String PERMISSION_NODE = "1vs1.arena.set." + NAME;
 
 	@Override
@@ -34,7 +34,7 @@ public class ArenaSetKitCommand implements ISubCommand {
 		}
 
 		if(args.length != 4) {
-			sender.sendMessage(ChatColor.RED + "/1vs1 arena set kit [arenaName]");
+			sender.sendMessage(ChatColor.RED + "/1vs1 arena set inv [arenaName]");
 			return true;
 		}
 
@@ -46,8 +46,8 @@ public class ArenaSetKitCommand implements ISubCommand {
 
 		Arena arena = manager.getArena(args[3]);
 		arena.setInventory(((Player)sender).getInventory());
-		//arena.save();
-		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[3] + " のキットを設定しました");
+		manager.save(arena, args[3]);
+		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[3] + " のインベントリを設定しました");
 		return true;
 	}
 

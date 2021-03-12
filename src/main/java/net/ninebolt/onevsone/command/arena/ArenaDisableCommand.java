@@ -46,6 +46,7 @@ public class ArenaDisableCommand implements ISubCommand {
 		}
 
 		arena.setEnabled(false);
+		manager.save(arena, args[2]);
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[2] + " を無効にしました");
 		return true;
 	}

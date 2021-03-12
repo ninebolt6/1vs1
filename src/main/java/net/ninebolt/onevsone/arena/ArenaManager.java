@@ -100,15 +100,14 @@ public class ArenaManager {
 		}
 	}
 
-	public void create(String name) {
-		Arena arena = new Arena(name);
-
+	public void register(String name, Arena arena) {
 		arenaMap.put(name, arena);
 		save(arena, name);
 	}
 
 	public void delete(String name) {
 		arenaMap.remove(name);
+		// delete file
 	}
 
 }

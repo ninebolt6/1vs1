@@ -6,8 +6,8 @@ import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaState;
 
 public class Match {
-	public static final int PLAYER_ONE = 0;
-	public static final int PLAYER_TWO = 1;
+	public static final int PLAYER_ONE = 1;
+	public static final int PLAYER_TWO = 2;
 
 	private Arena arena;
 	private ArenaState state;
