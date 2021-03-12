@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.util.Messages;
 
 public class ArenaManager {
@@ -28,21 +27,37 @@ public class ArenaManager {
 	}
 
 	protected void initArenas() {
+		if(arenaFolder.listFiles().length < 1) {
+			return;
+		}
+
 		for(File file : arenaFolder.listFiles()) {
 			String fileName = file.getName();
-			if(file.isFile() && fileName.endsWith(".yml")) {
-				Arena arena = Arena.deserialize(file);
-				if(arena == null) {
-					OneVsOne.getInstance().getLogger().info(Messages.arenaDeserializeError(fileName));
-					continue;
-				}
-
-				int dotPoint = fileName.lastIndexOf('.');
-				if(dotPoint != -1) {
-					String name = fileName.substring(0, dotPoint);
-					arenaMap.put(name, arena) ;
-				}
+			if(!file.isFile() || !fileName.endsWith(".yml")) {
+				continue;
 			}
+
+			Arena arena = null;
+			try {
+				arena = deserialize(file);
+			} catch(ClassCastException e) {
+				System.out.println(Messages.arenaFormatError(fileName));
+				continue;
+			}
+
+			if(arena == null) {
+				System.out.println(Messages.arenaFormatError(fileName));
+				continue;
+			}
+
+			int dotPoint = fileName.lastIndexOf('.');
+			if(dotPoint == -1) {
+				System.out.println("Unexpected error.");
+				continue;
+			}
+
+			String name = fileName.substring(0, dotPoint);
+			arenaMap.put(name, arena);
 		}
 	}
 
@@ -55,6 +70,11 @@ public class ArenaManager {
 
 	public List<Arena> getArenaList() {
 		return new ArrayList<Arena>(arenaMap.values());
+	}
+
+	public Arena deserialize(File file) throws ClassCastException {
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+		return config.getObject("arena", Arena.class);
 	}
 
 	public boolean contains(String name) {

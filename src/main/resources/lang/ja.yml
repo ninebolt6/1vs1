@@ -6,4 +6,4 @@ arenaNotFound: "アリーナ %arena% が見つかりませんでした"
 arenaAlreadyExists: "アリーナ %arena% はすでに存在しています"
 
 #エラーメッセージ
-arenaDeserializeError: "アリーナファイル %fileName% の読み込みに失敗しました。ファイルのフォーマットを確認してください。"
+arenaFormatError: "アリーナファイル %fileName% の読み込みに失敗しました。ファイルの書式が正しいかどうか確認してください。"

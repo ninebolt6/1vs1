@@ -6,8 +6,10 @@ import java.io.UnsupportedEncodingException;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.command.GameGUICommand;
 import net.ninebolt.onevsone.command.RootCommand;
@@ -16,6 +18,7 @@ import net.ninebolt.onevsone.event.IngameListener;
 import net.ninebolt.onevsone.match.Match;
 import net.ninebolt.onevsone.match.MatchManager;
 import net.ninebolt.onevsone.match.MatchSelector;
+import net.ninebolt.onevsone.player.Stats;
 import net.ninebolt.onevsone.util.Messages;
 import net.ninebolt.onevsone.util.UUIDCache;
 
@@ -27,10 +30,15 @@ public class OneVsOne extends JavaPlugin {
 	private RootCommand rootCommand;
 	private GameGUICommand guiCommand;
 
+	static {
+		ConfigurationSerialization.registerClass(Arena.class);
+	}
+
 	public static OneVsOne getInstance() {
 		return instance;
 	}
 
+	@Override
 	public void onEnable() {
 		instance = this;
 
@@ -45,6 +53,8 @@ public class OneVsOne extends JavaPlugin {
 			return;
 		}
 		Messages.initExternalConfig(new File(getDataFolder(), "/lang/"), getConfig().getString("lang"));
+		//ConfigurationSerialization.registerClass(Arena.class);
+		ConfigurationSerialization.registerClass(Stats.class);
 
 		// 各種クラスのインスタンス生成
 		cache = new UUIDCache(getDataFolder());
@@ -69,7 +79,7 @@ public class OneVsOne extends JavaPlugin {
 
 	public void onDisable() {
 		MatchManager matchManager = MatchManager.getInstance();
-		// すべてのゲームを安全に無効化
+		// すべてのマッチを安全に無効化
 		for(Match match : matchManager.getMatches()) {
 			match.stop();
 		}

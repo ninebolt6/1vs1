@@ -100,8 +100,8 @@ public class Messages {
 	 * System error messages
 	 */
 
-	public static String arenaDeserializeError(String fileName) {
-		String message = getString("arenaDeserializeError");
+	public static String arenaFormatError(String fileName) {
+		String message = getString("arenaFormatError");
 		message = message.replace("%fileName%", fileName);
 		return message;
 	}

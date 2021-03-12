@@ -16,8 +16,6 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.ninebolt.onevsone.OneVsOne;
-import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.util.Messages;
 
 public class MatchSelector implements Listener {
@@ -31,18 +29,17 @@ public class MatchSelector implements Listener {
 	public MatchSelector() {
 		inventory = Bukkit.createInventory(null, ROW*9, Messages.getColoredText(INVENTORY_NAME));
 		initContents();
-		//inventory.addItem(createItem(Material.STONE, "test", "testLore", "testLore2"));
 	}
 
 	public void initContents() {
-		for(Arena arena : OneVsOne.getArenaManager().getArenaList()) {
+		MatchManager matchManager = MatchManager.getInstance();
+		for(Match match : matchManager.getMatches()) {
 			ItemStack arenaItem;
-			if(arena.isEnabled()) {
-				arenaItem = createItem(Material.GREEN_WOOL, arena.getDisplayName());
+			if(match.canJoin()) {
+				arenaItem = createItem(Material.GREEN_WOOL, match.getArena().getDisplayName(), "参加可能");
 			} else {
-				arenaItem = createItem(Material.RED_WOOL, arena.getDisplayName());
+				arenaItem = createItem(Material.RED_WOOL, match.getArena().getDisplayName(), "参加不可");
 			}
-
 			inventory.addItem(arenaItem);
 		}
 	}
@@ -60,14 +57,9 @@ public class MatchSelector implements Listener {
 		return inventory;
 	}
 
-	public int getRowSize() {
-		return ROW;
-	}
-
 	public void open(Player player) {
 		InventoryView view = player.openInventory(inventory);
 		openList.put(player, view);
-		System.out.println("PUT");
 	}
 
 	@EventHandler
@@ -79,16 +71,11 @@ public class MatchSelector implements Listener {
 			return;
 		}
 
-		if(!event.getView().equals(openList.get(player))) {
-			return;
-		}
-
-		if(clickedItem == null) {
+		if(clickedItem == null || !event.getView().equals(openList.get(player))) {
 			return;
 		}
 
 		event.setCancelled(true);
-		player.sendMessage("You've clicked a GameSelector inventory");
 	}
 
 	@EventHandler
@@ -96,7 +83,6 @@ public class MatchSelector implements Listener {
 		Player player = (Player) event.getPlayer();
 		if(openList.containsKey(player) && (event.getView().equals(openList.get(player)))) {
 			openList.remove(player);
-			System.out.println("REMOVED");
 		}
 	}
 }

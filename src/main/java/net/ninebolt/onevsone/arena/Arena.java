@@ -1,11 +1,9 @@
 package net.ninebolt.onevsone.arena;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.Inventory;
 
@@ -23,6 +21,13 @@ public class Arena implements ConfigurationSerializable {
 		enabled = false;
 		inventory = null;
 		spawns = null;
+	}
+
+	public Arena(Map<String, Object> map) {
+		displayName = (String) map.get("displayName");
+		enabled = (boolean) map.get("enabled");
+		inventory = (Inventory) map.get("inventory");
+		spawns = (Location[]) map.get("spawns");
 	}
 
 	public String getDisplayName() {
@@ -73,12 +78,6 @@ public class Arena implements ConfigurationSerializable {
 		map.put("inventory", inventory);
 		map.put("spawns", spawns);
 		return map;
-	}
-
-	public static Arena deserialize(File file) {
-		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-		Arena arena = config.getObject("arena", Arena.class);
-		return arena;
 	}
 
 }

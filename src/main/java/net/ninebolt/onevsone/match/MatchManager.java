@@ -17,12 +17,10 @@ public class MatchManager {
 
 	private static List<Match> matches;
 	private static Map<Player, Match> playerMap;
-	private static ArenaManager arenaManager;
 
 	private MatchManager() {
 		matches = new ArrayList<Match>();
 		playerMap = new HashMap<Player, Match>();
-		arenaManager = OneVsOne.getArenaManager();
 		initMatches();
 
 		System.out.println("DEBUG: MatchManagerのインスタンスが作られました");
@@ -33,6 +31,7 @@ public class MatchManager {
 	}
 
 	protected void initMatches() {
+		ArenaManager arenaManager = OneVsOne.getArenaManager();
 		for(Arena arena : arenaManager.getArenaList()) {
 			matches.add(new Match(arena));
 		}

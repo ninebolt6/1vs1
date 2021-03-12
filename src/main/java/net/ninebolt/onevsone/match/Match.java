@@ -12,11 +12,13 @@ public class Match {
 	private Arena arena;
 	private ArenaState state;
 	private Player[] players;
+	private boolean canJoin;
 
 	public Match(Arena arena) {
 		this.arena = arena;
 		this.players = new Player[2];
 		this.state = ArenaState.WAITING;
+		this.canJoin = arena.isEnabled();
 	}
 
 	public ArenaState getState() {
@@ -33,6 +35,10 @@ public class Match {
 
 	public Arena getArena() {
 		return arena;
+	}
+
+	public boolean canJoin() {
+		return canJoin;
 	}
 
 	public void start() {
