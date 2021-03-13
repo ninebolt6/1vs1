@@ -52,6 +52,20 @@ public class MatchManager {
 		return getPlayerMap().get(player);
 	}
 
+	public Match getMatch(Arena arena) {
+		for(Match match : matches) {
+			if(match.getArena().equals(arena)) {
+				return match;
+			}
+		}
+		return null;
+	}
+
+	public void play(Player player, Match match) {
+		playerMap.put(player, match);
+		match.addPlayer(player);
+	}
+
 	public Map<Player, Match> getPlayerMap() {
 		return playerMap;
 	}

@@ -45,8 +45,10 @@ public class ArenaEnableCommand implements ISubCommand {
 			return true;
 		}
 
+		// すべての項目が設定されていることを確認
+
 		arena.setEnabled(true);
-		manager.save(arena, args[2]);
+		manager.save(arena);
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[2] + " を有効にしました");
 		return true;
 	}

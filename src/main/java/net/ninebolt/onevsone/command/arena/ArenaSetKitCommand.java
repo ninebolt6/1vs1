@@ -46,7 +46,7 @@ public class ArenaSetKitCommand implements ISubCommand {
 
 		Arena arena = manager.getArena(args[3]);
 		arena.setInventory(((Player)sender).getInventory());
-		manager.save(arena, args[3]);
+		manager.save(arena);
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[3] + " のインベントリを設定しました");
 		return true;
 	}

@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.ninebolt.onevsone.arena.Arena;
@@ -83,7 +84,9 @@ public class OneVsOne extends JavaPlugin {
 			match.stop();
 		}
 
-		//close all matchselectors
+		for(InventoryView view : MatchSelector.getInventoryViewList()) {
+			view.close();
+		}
 	}
 
 	@Override

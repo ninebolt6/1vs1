@@ -1,6 +1,7 @@
 package net.ninebolt.onevsone.match;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
+import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.util.Messages;
 
 public class MatchSelector implements Listener {
@@ -63,12 +65,16 @@ public class MatchSelector implements Listener {
 	protected void setArenaMeta(ItemStack item, final Arena arena) {
 		NamespacedKey key = new NamespacedKey(OneVsOne.getInstance(), "arenaName");
 		ItemMeta meta = item.getItemMeta();
-		meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, arena.getDisplayName());
+		meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, arena.getName());
 		item.setItemMeta(meta);
 	}
 
 	public Inventory getInventory() {
 		return inventory;
+	}
+
+	public static Collection<InventoryView> getInventoryViewList() {
+		return openList.values();
 	}
 
 	public void open(Player player) {
@@ -91,10 +97,14 @@ public class MatchSelector implements Listener {
 
 		PersistentDataContainer container = clickedItem.getItemMeta().getPersistentDataContainer();
 		NamespacedKey key = new NamespacedKey(OneVsOne.getInstance(), "arenaName");
-		if(container.has(key, PersistentDataType.STRING)) {
-			player.sendMessage(container.get(key, PersistentDataType.STRING));
+		if(!container.has(key, PersistentDataType.STRING)) {
+			return;
 		}
 
+		ArenaManager arenaManager = OneVsOne.getArenaManager();
+		Arena arena = arenaManager.getArena(container.get(key, PersistentDataType.STRING));
+		MatchManager matchManager = MatchManager.getInstance();
+		matchManager.play(player, matchManager.getMatch(arena));
 		event.setCancelled(true);
 	}
 

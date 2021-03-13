@@ -59,7 +59,7 @@ public class ArenaSetSpawnCommand implements ISubCommand {
 
 		Arena arena = manager.getArena(args[4]);
 		arena.getArenaSpawn().setSpawn(spawnNumber, ((Player)sender).getLocation());
-		manager.save(arena, args[4]);
+		manager.save(arena);
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[4] + " のスポーン" + args[3] + "を設定しました");
 		return true;
 	}

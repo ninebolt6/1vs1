@@ -43,7 +43,9 @@ public class ArenaManager {
 				System.out.println(Messages.arenaFormatError(fileName));
 				continue;
 			}
-			arenaMap.put(NameParser.getNameWithoutExtension(fileName), arena);
+			String name = NameParser.getNameWithoutExtension(fileName);
+			arena.setName(name);
+			arenaMap.put(name, arena);
 		}
 	}
 
@@ -58,7 +60,7 @@ public class ArenaManager {
 		return new ArrayList<Arena>(arenaMap.values());
 	}
 
-	public Arena deserialize(File file) throws ClassCastException {
+	public Arena deserialize(File file) {
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 		return config.getObject("arena", Arena.class);
 	}
@@ -71,11 +73,11 @@ public class ArenaManager {
 		}
 	}
 
-	public void save(Arena arena, String name) {
+	public void save(Arena arena) {
 		if(arena == null) {
 			// error
 		}
-		File file = new File(arenaFolder, name+".yml");
+		File file = new File(arenaFolder, arena.getName() + ".yml");
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
 		config.set("arena", arena);
@@ -86,9 +88,9 @@ public class ArenaManager {
 		}
 	}
 
-	public void register(String name, Arena arena) {
-		arenaMap.put(name, arena);
-		save(arena, name);
+	public void register(Arena arena) {
+		arenaMap.put(arena.getName(), arena);
+		save(arena);
 	}
 
 	public void delete(String name) {

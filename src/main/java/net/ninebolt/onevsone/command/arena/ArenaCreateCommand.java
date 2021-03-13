@@ -37,7 +37,7 @@ public class ArenaCreateCommand implements ISubCommand {
 		}
 
 		Arena arena = new Arena(args[2]);
-		manager.register(args[2], arena);
+		manager.register(arena);
 		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[2] + " を作成しました");
 		return true;
 	}

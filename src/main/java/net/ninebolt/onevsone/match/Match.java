@@ -33,6 +33,36 @@ public class Match {
 		return players;
 	}
 
+	public void addPlayer(Player player) {
+		if(players[0] != null && players[1] != null) {
+			System.out.println("through return");
+			return;
+		}
+
+		if(players[0] == null) {
+			players[0] = player;
+			player.teleport(getArena().getArenaSpawn().getLocation(PLAYER_ONE));
+			System.out.println("player1");
+		} else if(players[1] == null) {
+			players[1] = player;
+			player.teleport(getArena().getArenaSpawn().getLocation(PLAYER_TWO));
+			System.out.println("player2");
+		}
+
+		// inventory cache
+		// inventory set
+	}
+
+	public void removePlayer(Player player) {
+		if(players[0] != null && players[0].equals(player)) {
+			players[0] = null;
+		}
+
+		if(players[1] != null && players[1].equals(player)) {
+			players[1] = null;
+		}
+	}
+
 	public int getPlayerNumber(Player player) {
 		if(players[0].equals(player)) {
 			return PLAYER_ONE;

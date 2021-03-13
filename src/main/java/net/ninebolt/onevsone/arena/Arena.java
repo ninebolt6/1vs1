@@ -8,12 +8,14 @@ import org.bukkit.inventory.Inventory;
 
 public class Arena implements ConfigurationSerializable {
 
+	private String name;
 	private String displayName;
 	private boolean enabled;
 	private Inventory inventory;
 	private ArenaSpawn spawn;
 
 	public Arena(String name) {
+		this.name = name;
 		displayName = name;
 		enabled = false;
 		inventory = null;
@@ -21,10 +23,19 @@ public class Arena implements ConfigurationSerializable {
 	}
 
 	public Arena(Map<String, Object> map) {
+		name = (String) map.get("displayName");
 		displayName = (String) map.get("displayName");
 		enabled = (boolean) map.get("enabled");
 		inventory = (Inventory) map.get("inventory");
 		spawn = (ArenaSpawn) map.get("spawn");
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDisplayName() {
