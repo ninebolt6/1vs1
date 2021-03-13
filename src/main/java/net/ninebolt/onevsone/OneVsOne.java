@@ -11,11 +11,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
-import net.ninebolt.onevsone.arena.SpawnLocation;
+import net.ninebolt.onevsone.arena.ArenaSpawn;
 import net.ninebolt.onevsone.command.GameGUICommand;
 import net.ninebolt.onevsone.command.RootCommand;
 import net.ninebolt.onevsone.event.CacheUniqueIdListener;
-import net.ninebolt.onevsone.event.IngameListener;
+import net.ninebolt.onevsone.event.MatchListener;
 import net.ninebolt.onevsone.match.Match;
 import net.ninebolt.onevsone.match.MatchManager;
 import net.ninebolt.onevsone.match.MatchSelector;
@@ -51,7 +51,7 @@ public class OneVsOne extends JavaPlugin {
 		}
 		Messages.initExternalConfig(new File(getDataFolder(), "/lang/"), getConfig().getString("lang"));
 
-		ConfigurationSerialization.registerClass(SpawnLocation.class);
+		ConfigurationSerialization.registerClass(ArenaSpawn.class);
 		ConfigurationSerialization.registerClass(Arena.class);
 		ConfigurationSerialization.registerClass(Stats.class);
 
@@ -65,7 +65,7 @@ public class OneVsOne extends JavaPlugin {
 		// イベントリスナーの登録
 		getServer().getPluginManager().registerEvents(new MatchSelector(), this);
 		getServer().getPluginManager().registerEvents(new CacheUniqueIdListener(), this);
-		getServer().getPluginManager().registerEvents(new IngameListener(), this);
+		getServer().getPluginManager().registerEvents(new MatchListener(), this);
 	}
 
 	public static UUIDCache getUUIDCache() {

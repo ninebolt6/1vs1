@@ -11,20 +11,20 @@ public class Arena implements ConfigurationSerializable {
 	private String displayName;
 	private boolean enabled;
 	private Inventory inventory;
-	private SpawnLocation spawns;
+	private ArenaSpawn spawn;
 
 	public Arena(String name) {
 		displayName = name;
 		enabled = false;
 		inventory = null;
-		spawns = new SpawnLocation(null, null);
+		spawn = new ArenaSpawn(null, null);
 	}
 
 	public Arena(Map<String, Object> map) {
 		displayName = (String) map.get("displayName");
 		enabled = (boolean) map.get("enabled");
 		inventory = (Inventory) map.get("inventory");
-		spawns = (SpawnLocation) map.get("spawns");
+		spawn = (ArenaSpawn) map.get("spawn");
 	}
 
 	public String getDisplayName() {
@@ -51,12 +51,12 @@ public class Arena implements ConfigurationSerializable {
 		this.inventory = inventory;
 	}
 
-	public SpawnLocation getSpawnLocations() {
-		return spawns;
+	public ArenaSpawn getArenaSpawn() {
+		return spawn;
 	}
 
-	public void setSpawnLocation(SpawnLocation spawns) {
-		this.spawns = spawns;
+	public void setArenaSpawn(ArenaSpawn spawn) {
+		this.spawn = spawn;
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class Arena implements ConfigurationSerializable {
 		map.put("displayName", displayName);
 		map.put("enabled", enabled);
 		map.put("inventory", inventory);
-		map.put("spawns", spawns);
+		map.put("spawn", spawn);
 		return map;
 	}
 

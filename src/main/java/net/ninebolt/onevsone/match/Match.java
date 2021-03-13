@@ -33,6 +33,18 @@ public class Match {
 		return players;
 	}
 
+	public int getPlayerNumber(Player player) {
+		if(players[0].equals(player)) {
+			return PLAYER_ONE;
+		}
+
+		if(players[1].equals(player)) {
+			return PLAYER_TWO;
+		}
+
+		return -1;
+	}
+
 	public Arena getArena() {
 		return arena;
 	}
@@ -42,10 +54,14 @@ public class Match {
 	}
 
 	public void start() {
+		if(players.length != 2) {
+			// error
+		}
 
+		state = ArenaState.INGAME;
 	}
 
 	public void stop() {
-
+		state = ArenaState.WAITING;
 	}
 }

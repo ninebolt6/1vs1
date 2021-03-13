@@ -8,22 +8,22 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import net.ninebolt.onevsone.match.Match;
 
-public class SpawnLocation implements ConfigurationSerializable {
+public class ArenaSpawn implements ConfigurationSerializable {
 
 	private Location spawn1;
 	private Location spawn2;
 
-	public SpawnLocation(Location spawn1, Location spawn2) {
+	public ArenaSpawn(Location spawn1, Location spawn2) {
 		this.spawn1 = spawn1;
 		this.spawn2 = spawn2;
 	}
 
-	public SpawnLocation(Map<String, Object> map) {
+	public ArenaSpawn(Map<String, Object> map) {
 		this.spawn1 = (Location) map.get("spawn1");
 		this.spawn2 = (Location) map.get("spawn2");
 	}
 
-	public Location getSpawn(int playerNum) {
+	public Location getLocation(int playerNum) {
 		if(playerNum == Match.PLAYER_ONE) {
 			return spawn1;
 		}
