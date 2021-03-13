@@ -10,6 +10,7 @@ import java.util.Map;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import net.ninebolt.onevsone.util.Messages;
+import net.ninebolt.onevsone.util.NameParser;
 
 public class ArenaManager {
 
@@ -37,27 +38,12 @@ public class ArenaManager {
 				continue;
 			}
 
-			Arena arena = null;
-			try {
-				arena = deserialize(file);
-			} catch(ClassCastException e) {
-				System.out.println(Messages.arenaFormatError(fileName));
-				continue;
-			}
-
+			Arena arena = deserialize(file);
 			if(arena == null) {
 				System.out.println(Messages.arenaFormatError(fileName));
 				continue;
 			}
-
-			int dotPoint = fileName.lastIndexOf('.');
-			if(dotPoint == -1) {
-				System.out.println("Unexpected error.");
-				continue;
-			}
-
-			String name = fileName.substring(0, dotPoint);
-			arenaMap.put(name, arena);
+			arenaMap.put(NameParser.getNameWithoutExtension(fileName), arena);
 		}
 	}
 

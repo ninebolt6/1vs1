@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +16,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
+import net.ninebolt.onevsone.OneVsOne;
+import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.util.Messages;
 
 public class MatchSelector implements Listener {
@@ -35,11 +40,13 @@ public class MatchSelector implements Listener {
 		MatchManager matchManager = MatchManager.getInstance();
 		for(Match match : matchManager.getMatches()) {
 			ItemStack arenaItem;
+			Arena arena = match.getArena();
 			if(match.canJoin()) {
-				arenaItem = createItem(Material.GREEN_WOOL, match.getArena().getDisplayName(), "参加可能");
+				arenaItem = createItem(Material.GREEN_WOOL, arena.getDisplayName(), "参加可能");
 			} else {
-				arenaItem = createItem(Material.RED_WOOL, match.getArena().getDisplayName(), "参加不可");
+				arenaItem = createItem(Material.RED_WOOL, arena.getDisplayName(), "参加不可");
 			}
+			setArenaMeta(arenaItem, arena);
 			inventory.addItem(arenaItem);
 		}
 	}
@@ -51,6 +58,13 @@ public class MatchSelector implements Listener {
 		meta.setLore(Arrays.asList(lore));
 		item.setItemMeta(meta);
 		return item;
+	}
+
+	protected void setArenaMeta(ItemStack item, final Arena arena) {
+		NamespacedKey key = new NamespacedKey(OneVsOne.getInstance(), "arenaName");
+		ItemMeta meta = item.getItemMeta();
+		meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, arena.getDisplayName());
+		item.setItemMeta(meta);
 	}
 
 	public Inventory getInventory() {
@@ -73,6 +87,12 @@ public class MatchSelector implements Listener {
 
 		if(clickedItem == null || !event.getView().equals(openList.get(player))) {
 			return;
+		}
+
+		PersistentDataContainer container = clickedItem.getItemMeta().getPersistentDataContainer();
+		NamespacedKey key = new NamespacedKey(OneVsOne.getInstance(), "arenaName");
+		if(container.has(key, PersistentDataType.STRING)) {
+			player.sendMessage(container.get(key, PersistentDataType.STRING));
 		}
 
 		event.setCancelled(true);

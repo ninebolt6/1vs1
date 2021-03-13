@@ -82,6 +82,8 @@ public class OneVsOne extends JavaPlugin {
 		for(Match match : matchManager.getMatches()) {
 			match.stop();
 		}
+
+		//close all matchselectors
 	}
 
 	@Override
