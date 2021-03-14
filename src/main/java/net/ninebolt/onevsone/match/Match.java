@@ -35,18 +35,15 @@ public class Match {
 
 	public void addPlayer(Player player) {
 		if(players[0] != null && players[1] != null) {
-			System.out.println("through return");
 			return;
 		}
 
 		if(players[0] == null) {
 			players[0] = player;
 			player.teleport(getArena().getArenaSpawn().getLocation(PLAYER_ONE));
-			System.out.println("player1");
 		} else if(players[1] == null) {
 			players[1] = player;
 			player.teleport(getArena().getArenaSpawn().getLocation(PLAYER_TWO));
-			System.out.println("player2");
 		}
 
 		// inventory cache

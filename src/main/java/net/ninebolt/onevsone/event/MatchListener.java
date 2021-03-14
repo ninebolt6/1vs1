@@ -79,7 +79,7 @@ public class MatchListener implements Listener {
 	}
 
 	@EventHandler
-	public void onDamageWhileCountdown(EntityDamageEvent event) {
+	public void onDamageInArena(EntityDamageEvent event) {
 		MatchManager manager = MatchManager.getInstance();
 
 		if(event.getEntity() instanceof Player) {
@@ -99,8 +99,7 @@ public class MatchListener implements Listener {
 		MatchManager manager = MatchManager.getInstance();
 
 		if(manager.isPlaying(player)) {
-			Match match = manager.getMatch(player);
-			match.stop();
+			manager.leave(player);
 		}
 	}
 }

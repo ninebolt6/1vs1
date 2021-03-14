@@ -22,8 +22,6 @@ public class MatchManager {
 		matches = new ArrayList<Match>();
 		playerMap = new HashMap<Player, Match>();
 		initMatches();
-
-		System.out.println("DEBUG: MatchManagerのインスタンスが作られました");
 	}
 
 	public static MatchManager getInstance() {
@@ -64,6 +62,14 @@ public class MatchManager {
 	public void play(Player player, Match match) {
 		playerMap.put(player, match);
 		match.addPlayer(player);
+	}
+
+	public void leave(Player player) {
+		if(!playerMap.containsKey(player)) {
+			return;
+		}
+		getMatch(player).removePlayer(player);
+		playerMap.remove(player);
 	}
 
 	public Map<Player, Match> getPlayerMap() {

@@ -8,7 +8,7 @@ import net.ninebolt.onevsone.player.Stats;
 import net.ninebolt.onevsone.player.StatsManager;
 import net.ninebolt.onevsone.util.Messages;
 
-public class StatsCommand implements ISubCommand {
+public class StatsCommand implements SubCommand {
 
 	private static final String NAME = "stats";
 	private static final String PERMISSION_NODE = "1vs1." + NAME;

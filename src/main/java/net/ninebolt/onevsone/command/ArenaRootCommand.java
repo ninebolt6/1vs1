@@ -12,15 +12,15 @@ import net.ninebolt.onevsone.command.arena.ArenaSetCommand;
 import net.ninebolt.onevsone.command.arena.ArenaDeleteCommand;
 import net.ninebolt.onevsone.util.Messages;
 
-public class ArenaRootCommand implements ISubCommand {
+public class ArenaRootCommand implements SubCommand {
 
 	private static final String NAME = "arena";
 	private static final String PERMISSION_NODE = "1vs1." + NAME;
 
-	private List<ISubCommand> commandList;
+	private List<SubCommand> commandList;
 
 	public ArenaRootCommand() {
-		commandList = new ArrayList<ISubCommand>();
+		commandList = new ArrayList<SubCommand>();
 		commandList.add(new ArenaSetCommand());
 		commandList.add(new ArenaCreateCommand());
 		commandList.add(new ArenaDeleteCommand());
@@ -45,7 +45,7 @@ public class ArenaRootCommand implements ISubCommand {
 			return true;
 		}
 
-		for(ISubCommand command : commandList) {
+		for(SubCommand command : commandList) {
 			if(command.getName().equalsIgnoreCase(args[1])) {
 				if(!sender.hasPermission(command.getPermissionNode())) {
 					sender.sendMessage(Messages.notPermitted());

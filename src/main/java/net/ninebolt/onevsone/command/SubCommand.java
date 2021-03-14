@@ -2,7 +2,7 @@ package net.ninebolt.onevsone.command;
 
 import org.bukkit.command.CommandSender;
 
-public interface ISubCommand {
+public interface SubCommand {
 	public String getName();
 	public String getPermissionNode();
 

@@ -7,15 +7,16 @@ import org.bukkit.command.CommandSender;
 
 public class RootCommand
 {
-	private List<ISubCommand> commandList;
+	private List<SubCommand> commandList;
 	public RootCommand() {
-		commandList = new ArrayList<ISubCommand>();
+		commandList = new ArrayList<SubCommand>();
 		commandList.add(new ArenaRootCommand());
 		commandList.add(new StatsCommand());
+		commandList.add(new LeaveCommand());
 	}
 
 	public boolean execute(CommandSender sender, String label, String[] args) {
-		for(ISubCommand command : commandList) {
+		for(SubCommand command : commandList) {
 			if(command.getName().equalsIgnoreCase(args[0])) {
 				return command.execute(sender, args);
 			}
