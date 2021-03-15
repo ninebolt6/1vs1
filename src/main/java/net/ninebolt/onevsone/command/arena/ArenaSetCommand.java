@@ -17,7 +17,7 @@ public class ArenaSetCommand implements SubCommand {
 
 	public ArenaSetCommand() {
 		commandList = new ArrayList<SubCommand>();
-		commandList.add(new ArenaSetKitCommand());
+		commandList.add(new ArenaSetInventoryCommand());
 		commandList.add(new ArenaSetSpawnCommand());
 	}
 

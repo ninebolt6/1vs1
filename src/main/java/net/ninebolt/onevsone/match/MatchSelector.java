@@ -44,9 +44,9 @@ public class MatchSelector implements Listener {
 			ItemStack arenaItem;
 			Arena arena = match.getArena();
 			if(match.canJoin()) {
-				arenaItem = createItem(Material.GREEN_WOOL, arena.getDisplayName(), "参加可能");
+				arenaItem = createItem(Material.GREEN_WOOL, arena.getDisplayName(), "参加可能", match.getState().toString());
 			} else {
-				arenaItem = createItem(Material.RED_WOOL, arena.getDisplayName(), "参加不可");
+				arenaItem = createItem(Material.RED_WOOL, arena.getDisplayName(), "参加不可", match.getState().toString());
 			}
 			setArenaMeta(arenaItem, arena);
 			inventory.addItem(arenaItem);

@@ -11,11 +11,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
-import net.ninebolt.onevsone.arena.ArenaState;
 import net.ninebolt.onevsone.match.Match;
 import net.ninebolt.onevsone.match.MatchManager;
+import net.ninebolt.onevsone.match.MatchState;
 
 public class MatchListener implements Listener {
 
@@ -62,23 +61,13 @@ public class MatchListener implements Listener {
 			return;
 		}
 
-		event.getDrops().clear();
-	}
-
-	@EventHandler
-	public void onRespawn(PlayerRespawnEvent event) {
-		Player player = event.getPlayer();
-		MatchManager manager = MatchManager.getInstance();
-
-		if(!manager.isPlaying(player)) {
-			return;
-		}
-
 		Match match = manager.getMatch(player);
-		event.setRespawnLocation(match.getArena().getArenaSpawn().getLocation(match.getPlayerNumber(player)));
+		event.getDrops().clear();
+		// 勝利・敗北処理
+		match.stop();
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onDamageInArena(EntityDamageEvent event) {
 		MatchManager manager = MatchManager.getInstance();
 
@@ -86,8 +75,13 @@ public class MatchListener implements Listener {
 			Player defender = (Player) event.getEntity();
 			if(manager.isPlaying(defender)) {
 				Match match = manager.getMatch(defender);
-				if(match.getState().equals(ArenaState.WAITING)) {
+				if(match.getState().equals(MatchState.WAITING)) {
 					event.setCancelled(true);
+				}
+				if(event.getFinalDamage() >= defender.getHealth()) {
+					event.setCancelled(true);
+					// dead
+					match.lose(defender);
 				}
 			}
 		}

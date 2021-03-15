@@ -59,6 +59,7 @@ public class Arena implements ConfigurationSerializable {
 	}
 
 	public void setInventory(Inventory inventory) {
+		// TODO change this
 		this.inventory = inventory;
 	}
 

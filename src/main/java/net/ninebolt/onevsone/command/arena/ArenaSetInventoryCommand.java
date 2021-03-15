@@ -10,7 +10,7 @@ import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.command.SubCommand;
 import net.ninebolt.onevsone.util.Messages;
 
-public class ArenaSetKitCommand implements SubCommand {
+public class ArenaSetInventoryCommand implements SubCommand {
 
 	private static final String NAME = "inv";
 	private static final String PERMISSION_NODE = "1vs1.arena.set." + NAME;
