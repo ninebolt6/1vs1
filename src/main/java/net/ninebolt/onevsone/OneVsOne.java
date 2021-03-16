@@ -11,6 +11,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.ninebolt.onevsone.arena.Arena;
+import net.ninebolt.onevsone.arena.ArenaInventory;
 import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.arena.ArenaSpawn;
 import net.ninebolt.onevsone.command.GameGUICommand;
@@ -53,6 +54,7 @@ public class OneVsOne extends JavaPlugin {
 		Messages.initExternalConfig(new File(getDataFolder(), "/lang/"), getConfig().getString("lang"));
 
 		ConfigurationSerialization.registerClass(ArenaSpawn.class);
+		ConfigurationSerialization.registerClass(ArenaInventory.class);
 		ConfigurationSerialization.registerClass(Arena.class);
 		ConfigurationSerialization.registerClass(Stats.class);
 

@@ -4,21 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.inventory.Inventory;
 
 public class Arena implements ConfigurationSerializable {
 
 	private String name;
 	private String displayName;
+	private ArenaInventory arenaInventory;
 	private boolean enabled;
-	private Inventory inventory;
+
 	private ArenaSpawn spawn;
 
 	public Arena(String name) {
 		this.name = name;
 		displayName = name;
 		enabled = false;
-		inventory = null;
+		arenaInventory = new ArenaInventory();
 		spawn = new ArenaSpawn(null, null);
 	}
 
@@ -26,7 +26,7 @@ public class Arena implements ConfigurationSerializable {
 		name = (String) map.get("displayName");
 		displayName = (String) map.get("displayName");
 		enabled = (boolean) map.get("enabled");
-		inventory = (Inventory) map.get("inventory");
+		arenaInventory = (ArenaInventory) map.get("inventory");
 		spawn = (ArenaSpawn) map.get("spawn");
 	}
 
@@ -54,13 +54,12 @@ public class Arena implements ConfigurationSerializable {
 		this.enabled = enabled;
 	}
 
-	public Inventory getInventory() {
-		return inventory;
+	public ArenaInventory getInventory() {
+		return arenaInventory;
 	}
 
-	public void setInventory(Inventory inventory) {
-		// TODO change this
-		this.inventory = inventory;
+	public void setInventory(ArenaInventory inventory) {
+		this.arenaInventory = inventory;
 	}
 
 	public ArenaSpawn getArenaSpawn() {
@@ -76,7 +75,7 @@ public class Arena implements ConfigurationSerializable {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("displayName", displayName);
 		map.put("enabled", enabled);
-		map.put("inventory", inventory);
+		map.put("inventory", arenaInventory);
 		map.put("spawn", spawn);
 		return map;
 	}

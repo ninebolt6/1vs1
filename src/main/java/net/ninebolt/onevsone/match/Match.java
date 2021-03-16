@@ -122,6 +122,8 @@ public class Match {
 		for(Player player : players) {
 			player.getInventory().clear();
 			player.getInventory().setContents(getArena().getInventory().getContents());
+			player.getInventory().setArmorContents(getArena().getInventory().getArmorContents());
+			player.getInventory().setExtraContents(getArena().getInventory().getExtraContents());
 		}
 
 		MatchTimer timer = new MatchTimer(this);
@@ -133,6 +135,8 @@ public class Match {
 		for(int i=0; i<2; i++) {
 			players[i].getInventory().clear();
 			players[i].getInventory().setContents(invCache[i].getContents());
+			players[i].getInventory().setArmorContents(invCache[i].getArmorContents());
+			players[i].getInventory().setExtraContents(invCache[i].getExtraContents());
 			players[i].teleport(locCache[i]);
 		}
 		sendMessage("Ended");
