@@ -73,11 +73,11 @@ public class Messages {
 	}
 
 	public static String[] formattedStats(Stats stats) {
-		List<String> list = getStringList("message.stats");
+		List<String> list = getStringList("statsMessage");
 		for(int i=0; i<list.size(); i++) {
 			list.set(i, getColoredText(list.get(i)));
 		}
-		return (String[]) list.toArray();
+		return list.toArray(new String[list.size()]);
 	}
 
 	public static String notPermitted() {

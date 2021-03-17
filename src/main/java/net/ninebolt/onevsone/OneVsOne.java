@@ -17,11 +17,13 @@ import net.ninebolt.onevsone.arena.ArenaSpawn;
 import net.ninebolt.onevsone.command.GameGUICommand;
 import net.ninebolt.onevsone.command.RootCommand;
 import net.ninebolt.onevsone.event.CacheUniqueIdListener;
+import net.ninebolt.onevsone.event.CreateStatsListener;
 import net.ninebolt.onevsone.event.MatchListener;
 import net.ninebolt.onevsone.match.Match;
 import net.ninebolt.onevsone.match.MatchManager;
 import net.ninebolt.onevsone.match.MatchSelector;
 import net.ninebolt.onevsone.player.Stats;
+import net.ninebolt.onevsone.player.StatsManager;
 import net.ninebolt.onevsone.util.Messages;
 import net.ninebolt.onevsone.util.UUIDCache;
 
@@ -29,6 +31,7 @@ public class OneVsOne extends JavaPlugin {
 	private static OneVsOne instance;
 	private static UUIDCache cache;
 	private static ArenaManager arenaManager;
+	private static StatsManager statsManager;
 
 	private RootCommand rootCommand;
 	private GameGUICommand guiCommand;
@@ -53,6 +56,7 @@ public class OneVsOne extends JavaPlugin {
 		}
 		Messages.initExternalConfig(new File(getDataFolder(), "/lang/"), getConfig().getString("lang"));
 
+		// シリアライズ登録
 		ConfigurationSerialization.registerClass(ArenaSpawn.class);
 		ConfigurationSerialization.registerClass(ArenaInventory.class);
 		ConfigurationSerialization.registerClass(Arena.class);
@@ -61,14 +65,16 @@ public class OneVsOne extends JavaPlugin {
 		// 各種クラスのインスタンス生成
 		cache = new UUIDCache(getDataFolder());
 		arenaManager = new ArenaManager(new File(getDataFolder(), "/arena/"));
+		statsManager = new StatsManager(new File(getDataFolder(), "/stats/"));
 
 		rootCommand = new RootCommand();
 		guiCommand = new GameGUICommand();
 
 		// イベントリスナーの登録
 		getServer().getPluginManager().registerEvents(new MatchSelector(), this);
-		getServer().getPluginManager().registerEvents(new CacheUniqueIdListener(), this);
 		getServer().getPluginManager().registerEvents(new MatchListener(), this);
+		getServer().getPluginManager().registerEvents(new CreateStatsListener(), this);
+		getServer().getPluginManager().registerEvents(new CacheUniqueIdListener(), this);
 	}
 
 	public static UUIDCache getUUIDCache() {
@@ -79,15 +85,20 @@ public class OneVsOne extends JavaPlugin {
 		return arenaManager;
 	}
 
+	public static StatsManager getStatsManager() {
+		return statsManager;
+	}
+
 	public void onDisable() {
 		MatchManager matchManager = MatchManager.getInstance();
+
+		// MatchSelectorを閉じる
+		for(InventoryView view : MatchSelector.getInventoryViewList()) {
+			view.close();
+		}
 		// すべてのマッチを安全に無効化
 		for(Match match : matchManager.getMatches()) {
 			match.stop();
-		}
-
-		for(InventoryView view : MatchSelector.getInventoryViewList()) {
-			view.close();
 		}
 	}
 

@@ -104,7 +104,9 @@ public class Match {
 
 	public void sendMessage(String message) {
 		for(Player player : players) {
-			player.sendMessage(message);
+			if(player != null) {
+				player.sendMessage(message);
+			}
 		}
 	}
 
@@ -133,11 +135,13 @@ public class Match {
 
 	public void stop() {
 		for(int i=0; i<2; i++) {
-			players[i].getInventory().clear();
-			players[i].getInventory().setContents(invCache[i].getContents());
-			players[i].getInventory().setArmorContents(invCache[i].getArmorContents());
-			players[i].getInventory().setExtraContents(invCache[i].getExtraContents());
-			players[i].teleport(locCache[i]);
+			if(players[i] != null) {
+				players[i].getInventory().clear();
+				players[i].getInventory().setContents(invCache[i].getContents());
+				players[i].getInventory().setArmorContents(invCache[i].getArmorContents());
+				players[i].getInventory().setExtraContents(invCache[i].getExtraContents());
+				players[i].teleport(locCache[i]);
+			}
 		}
 		sendMessage("Ended");
 		state = MatchState.WAITING;

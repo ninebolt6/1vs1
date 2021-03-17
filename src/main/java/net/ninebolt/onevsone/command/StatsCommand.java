@@ -37,7 +37,8 @@ public class StatsCommand implements SubCommand {
 				return true;
 			}
 
-			Stats stats = StatsManager.getStats(((Player)sender).getUniqueId().toString());
+			StatsManager manager = OneVsOne.getStatsManager();
+			Stats stats = manager.getStats(((Player)sender).getUniqueId().toString());
 			sender.sendMessage(Messages.formattedStats(stats));
 			return true;
 
@@ -54,7 +55,8 @@ public class StatsCommand implements SubCommand {
 				return true;
 			}
 
-			Stats stats = StatsManager.getStats(uuid);
+			StatsManager manager = OneVsOne.getStatsManager();
+			Stats stats = manager.getStats(uuid);
 			sender.sendMessage(Messages.formattedStats(stats));
 			return true;
 

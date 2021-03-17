@@ -7,15 +7,13 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public class Stats implements ConfigurationSerializable {
 
-	private String uuid;
 	private String playerName;
 	private int kills;
 	private int deaths;
 	private int wins;
 	private int defeats;
 
-	public Stats(String uuid, String playerName) {
-		this.uuid = uuid;
+	public Stats(String playerName) {
 		this.playerName = playerName;
 		this.kills = 0;
 		this.deaths = 0;
@@ -23,8 +21,12 @@ public class Stats implements ConfigurationSerializable {
 		this.defeats = 0;
 	}
 
-	public String getUUID() {
-		return uuid;
+	public Stats(Map<String, Object> map) {
+		this.playerName = (String) map.get("playerName");
+		this.kills = (int) map.get("kills");
+		this.deaths = (int) map.get("deaths");
+		this.wins = (int) map.get("wins");
+		this.defeats = (int) map.get("defeats");
 	}
 
 	public String getPlayerName() {

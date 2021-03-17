@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.player.Stats;
 import net.ninebolt.onevsone.player.StatsManager;
 
@@ -16,17 +17,18 @@ public class CreateStatsListener implements Listener {
 		Player player = event.getPlayer();
 		String playerName = player.getDisplayName();
 		String uuid = player.getUniqueId().toString();
+		StatsManager manager = OneVsOne.getStatsManager();
 
-		Stats stats = StatsManager.getStats(uuid);
+		Stats stats = manager.getStats(uuid);
 		if(stats == null) {
 			// create new stats
-			stats = new Stats(uuid, playerName);
+			stats = new Stats(playerName);
 			stats.setPlayerName(playerName);
 		}
 
 		if(stats.getPlayerName() != playerName) {
 			stats.setPlayerName(playerName);
 		}
-		StatsManager.save(uuid, stats);
+		manager.save(uuid, stats);
 	}
 }
