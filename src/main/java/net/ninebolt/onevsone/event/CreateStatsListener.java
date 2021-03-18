@@ -6,8 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import net.ninebolt.onevsone.OneVsOne;
-import net.ninebolt.onevsone.player.Stats;
-import net.ninebolt.onevsone.player.StatsManager;
+import net.ninebolt.onevsone.stats.Stats;
+import net.ninebolt.onevsone.stats.StatsManager;
 
 public class CreateStatsListener implements Listener {
 

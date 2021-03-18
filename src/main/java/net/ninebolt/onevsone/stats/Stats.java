@@ -1,4 +1,4 @@
-package net.ninebolt.onevsone.player;
+package net.ninebolt.onevsone.stats;
 
 import java.util.HashMap;
 import java.util.Map;

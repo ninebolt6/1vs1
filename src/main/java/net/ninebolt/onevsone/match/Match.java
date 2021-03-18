@@ -117,7 +117,7 @@ public class Match {
 	}
 
 	public void start() {
-		if(players.length != 2) {
+		if(players[0] == null || players[1] == null) {
 			// error
 		}
 

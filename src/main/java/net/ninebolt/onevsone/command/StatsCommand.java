@@ -4,8 +4,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.ninebolt.onevsone.OneVsOne;
-import net.ninebolt.onevsone.player.Stats;
-import net.ninebolt.onevsone.player.StatsManager;
+import net.ninebolt.onevsone.stats.Stats;
+import net.ninebolt.onevsone.stats.StatsManager;
 import net.ninebolt.onevsone.util.Messages;
 
 public class StatsCommand implements SubCommand {

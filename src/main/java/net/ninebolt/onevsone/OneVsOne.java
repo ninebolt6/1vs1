@@ -22,8 +22,8 @@ import net.ninebolt.onevsone.event.MatchListener;
 import net.ninebolt.onevsone.match.Match;
 import net.ninebolt.onevsone.match.MatchManager;
 import net.ninebolt.onevsone.match.MatchSelector;
-import net.ninebolt.onevsone.player.Stats;
-import net.ninebolt.onevsone.player.StatsManager;
+import net.ninebolt.onevsone.stats.Stats;
+import net.ninebolt.onevsone.stats.StatsManager;
 import net.ninebolt.onevsone.util.Messages;
 import net.ninebolt.onevsone.util.UUIDCache;
 

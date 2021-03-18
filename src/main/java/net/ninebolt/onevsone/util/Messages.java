@@ -11,7 +11,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import net.ninebolt.onevsone.player.Stats;
+import net.ninebolt.onevsone.stats.Stats;
 
 public class Messages {
 
