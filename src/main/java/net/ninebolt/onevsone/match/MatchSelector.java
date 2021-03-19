@@ -53,22 +53,6 @@ public class MatchSelector implements Listener {
 		}
 	}
 
-	protected ItemStack createItem(Material material, String name, String... lore) {
-		ItemStack item = new ItemStack(material);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(name);
-		meta.setLore(Arrays.asList(lore));
-		item.setItemMeta(meta);
-		return item;
-	}
-
-	protected void setArenaMeta(ItemStack item, final Arena arena) {
-		NamespacedKey key = new NamespacedKey(OneVsOne.getInstance(), "arenaName");
-		ItemMeta meta = item.getItemMeta();
-		meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, arena.getName());
-		item.setItemMeta(meta);
-	}
-
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -95,6 +79,8 @@ public class MatchSelector implements Listener {
 			return;
 		}
 
+		event.setCancelled(true);
+
 		PersistentDataContainer container = clickedItem.getItemMeta().getPersistentDataContainer();
 		NamespacedKey key = new NamespacedKey(OneVsOne.getInstance(), "arenaName");
 		if(!container.has(key, PersistentDataType.STRING)) {
@@ -104,8 +90,11 @@ public class MatchSelector implements Listener {
 		ArenaManager arenaManager = OneVsOne.getArenaManager();
 		Arena arena = arenaManager.getArena(container.get(key, PersistentDataType.STRING));
 		MatchManager matchManager = MatchManager.getInstance();
-		matchManager.play(player, matchManager.getMatch(arena));
-		event.setCancelled(true);
+		Match match = matchManager.getMatch(arena);
+		matchManager.join(player, match);
+		if(match.canStart()) {
+			match.start();
+		}
 	}
 
 	@EventHandler
@@ -114,5 +103,21 @@ public class MatchSelector implements Listener {
 		if(openList.containsKey(player) && (event.getView().equals(openList.get(player)))) {
 			openList.remove(player);
 		}
+	}
+
+	protected ItemStack createItem(Material material, String name, String... lore) {
+		ItemStack item = new ItemStack(material);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(name);
+		meta.setLore(Arrays.asList(lore));
+		item.setItemMeta(meta);
+		return item;
+	}
+
+	protected void setArenaMeta(ItemStack item, final Arena arena) {
+		NamespacedKey key = new NamespacedKey(OneVsOne.getInstance(), "arenaName");
+		ItemMeta meta = item.getItemMeta();
+		meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, arena.getName());
+		item.setItemMeta(meta);
 	}
 }

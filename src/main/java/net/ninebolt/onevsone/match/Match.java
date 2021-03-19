@@ -18,6 +18,7 @@ public class Match {
 	private Player[] players;
 	private boolean canJoin;
 
+	private MatchData data;
 	private Location[] locCache;
 	private PlayerInventory[] invCache;
 
@@ -27,8 +28,13 @@ public class Match {
 		this.state = MatchState.WAITING;
 		this.canJoin = arena.isEnabled();
 
+		data = new MatchData();
 		locCache = new Location[2];
 		invCache = new PlayerInventory[2];
+	}
+
+	public MatchData getMatchData() {
+		return data;
 	}
 
 	public MatchState getState() {
@@ -59,23 +65,37 @@ public class Match {
 			locCache[1] = player.getLocation();
 			player.teleport(getArena().getArenaSpawn().getLocation(PLAYER_TWO));
 		}
-
-		if(players[0] != null && players[1] != null) {
-			System.out.println("2p sorotta");
-			start();
-		}
-
-		// inventory set
 	}
 
 	public void removePlayer(Player player) {
 		if(players[0] != null && players[0].equals(player)) {
+			players[0].getInventory().clear();
+			players[0].getInventory().setContents(invCache[0].getContents());
+			players[0].getInventory().setArmorContents(invCache[0].getArmorContents());
+			players[0].getInventory().setExtraContents(invCache[0].getExtraContents());
+			players[0].teleport(locCache[0]);
 			players[0] = null;
 		}
 
 		if(players[1] != null && players[1].equals(player)) {
+			players[1].getInventory().clear();
+			players[1].getInventory().setContents(invCache[1].getContents());
+			players[1].getInventory().setArmorContents(invCache[1].getArmorContents());
+			players[1].getInventory().setExtraContents(invCache[1].getExtraContents());
+			players[1].teleport(locCache[1]);
 			players[1] = null;
 		}
+	}
+
+	public Player getOpponent(Player player) {
+		if(players[0] != null && players[0].equals(player)) {
+			return players[1];
+		}
+
+		if(players[1] != null && players[1].equals(player)) {
+			return players[0];
+		}
+		return null;
 	}
 
 	public int getPlayerNumber(Player player) {
@@ -102,6 +122,10 @@ public class Match {
 		this.canJoin = canJoin;
 	}
 
+	public boolean canStart() {
+		return (players[0] != null && players[1] != null);
+	}
+
 	public void sendMessage(String message) {
 		for(Player player : players) {
 			if(player != null) {
@@ -117,10 +141,6 @@ public class Match {
 	}
 
 	public void start() {
-		if(players[0] == null || players[1] == null) {
-			// error
-		}
-
 		for(Player player : players) {
 			player.getInventory().clear();
 			player.getInventory().setContents(getArena().getInventory().getContents());
@@ -131,21 +151,17 @@ public class Match {
 		MatchTimer timer = new MatchTimer(this);
 		timer.getCountdownTimer().runTaskTimerAsynchronously(OneVsOne.getInstance(), 0, 20);
 		state = MatchState.INGAME;
+		getMatchData().setRound(1);
 	}
 
 	public void stop() {
-		for(int i=0; i<2; i++) {
-			if(players[i] != null) {
-				players[i].getInventory().clear();
-				players[i].getInventory().setContents(invCache[i].getContents());
-				players[i].getInventory().setArmorContents(invCache[i].getArmorContents());
-				players[i].getInventory().setExtraContents(invCache[i].getExtraContents());
-				players[i].teleport(locCache[i]);
+		for(Player player : players) {
+			if(player != null) {
+				removePlayer(player);
 			}
 		}
-		sendMessage("Ended");
 		state = MatchState.WAITING;
-		players = new Player[2];
+		data = new MatchData();
 	}
 
 	public void lose(Player player) {

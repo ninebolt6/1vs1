@@ -59,7 +59,7 @@ public class MatchManager {
 		return null;
 	}
 
-	public void play(Player player, Match match) {
+	public void join(Player player, Match match) {
 		playerMap.put(player, match);
 		match.addPlayer(player);
 	}

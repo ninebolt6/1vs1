@@ -63,7 +63,6 @@ public class MatchListener implements Listener {
 
 		Match match = manager.getMatch(player);
 		event.getDrops().clear();
-		// 勝利・敗北処理
 		match.stop();
 	}
 
@@ -80,8 +79,10 @@ public class MatchListener implements Listener {
 				}
 				if(event.getFinalDamage() >= defender.getHealth()) {
 					event.setCancelled(true);
-					// dead
-					match.lose(defender);
+					match.getMatchData().setDeath(defender, match.getMatchData().getDeath(defender)+1);
+					match.getMatchData().setKill(match.getOpponent(defender), match.getMatchData().getKill(defender)+1);
+					// set item
+					// teleport
 				}
 			}
 		}
