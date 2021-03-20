@@ -21,7 +21,7 @@ public class MatchData {
 	}
 
 	public void setRound(int round) {
-		this.round = round;;
+		this.round = round;
 	}
 
 	public int getKill(Player player) {

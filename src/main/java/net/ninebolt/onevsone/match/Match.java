@@ -12,11 +12,11 @@ import net.ninebolt.onevsone.arena.Arena;
 public class Match {
 	public static final int PLAYER_ONE = 1;
 	public static final int PLAYER_TWO = 2;
+	private final int MAX_ROUND = 3;
 
 	private Arena arena;
 	private MatchState state;
 	private Player[] players;
-	private boolean canJoin;
 
 	private MatchData data;
 	private Location[] locCache;
@@ -26,7 +26,6 @@ public class Match {
 		this.arena = arena;
 		this.players = new Player[2];
 		this.state = MatchState.WAITING;
-		this.canJoin = arena.isEnabled();
 
 		data = new MatchData();
 		locCache = new Location[2];
@@ -114,12 +113,8 @@ public class Match {
 		return arena;
 	}
 
-	public boolean canJoin() {
-		return canJoin;
-	}
-
-	public void setJoinable(boolean canJoin) {
-		this.canJoin = canJoin;
+	public boolean isJoinable() {
+		return (arena.isEnabled() && state.equals(MatchState.WAITING));
 	}
 
 	public boolean canStart() {
@@ -164,10 +159,16 @@ public class Match {
 		data = new MatchData();
 	}
 
-	public void lose(Player player) {
-		player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-		// set inventory
-		player.teleport(getArena().getArenaSpawn().getLocation(getPlayerNumber(player)));
-		player.sendMessage("u r dead");
+	public void startNextRound() {
+		if(getMatchData().getRound() > MAX_ROUND) {
+			stop();
+		}
+		getMatchData().setRound(getMatchData().getRound()+1);
+
+		for(Player player : players) {
+			player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			// set inventory
+			player.teleport(getArena().getArenaSpawn().getLocation(getPlayerNumber(player)));
+		}
 	}
 }

@@ -43,7 +43,7 @@ public class MatchSelector implements Listener {
 		for(Match match : matchManager.getMatches()) {
 			ItemStack arenaItem;
 			Arena arena = match.getArena();
-			if(match.canJoin()) {
+			if(match.isJoinable()) {
 				arenaItem = createItem(Material.GREEN_WOOL, arena.getDisplayName(), "参加可能", match.getState().toString());
 			} else {
 				arenaItem = createItem(Material.RED_WOOL, arena.getDisplayName(), "参加不可", match.getState().toString());

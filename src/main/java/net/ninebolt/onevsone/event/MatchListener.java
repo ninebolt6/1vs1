@@ -81,8 +81,7 @@ public class MatchListener implements Listener {
 					event.setCancelled(true);
 					match.getMatchData().setDeath(defender, match.getMatchData().getDeath(defender)+1);
 					match.getMatchData().setKill(match.getOpponent(defender), match.getMatchData().getKill(defender)+1);
-					// set item
-					// teleport
+					match.startNextRound();
 				}
 			}
 		}
