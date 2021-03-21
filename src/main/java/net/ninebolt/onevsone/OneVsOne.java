@@ -36,10 +36,17 @@ public class OneVsOne extends JavaPlugin {
 	private RootCommand rootCommand;
 	private GameGUICommand guiCommand;
 
+	/**
+	 * MainクラスであるOneVsOneクラスのインスタンスを取得するメソッド
+	 * @return OneVsOneクラスのインスタンス
+	 */
 	public static OneVsOne getInstance() {
 		return instance;
 	}
 
+	/**
+	 * プラグイン有効化時に呼ばれるメソッド
+	 */
 	@Override
 	public void onEnable() {
 		instance = this;
@@ -77,18 +84,9 @@ public class OneVsOne extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new CacheUniqueIdListener(), this);
 	}
 
-	public static UUIDCache getUUIDCache() {
-		return cache;
-	}
-
-	public static ArenaManager getArenaManager() {
-		return arenaManager;
-	}
-
-	public static StatsManager getStatsManager() {
-		return statsManager;
-	}
-
+	/**
+	 * プラグイン無効化時に呼ばれるメソッド
+	 */
 	public void onDisable() {
 		MatchManager matchManager = MatchManager.getInstance();
 
@@ -102,6 +100,33 @@ public class OneVsOne extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * UUIDCacheのインスタンスを取得するメソッド
+	 * @return UUIDCacheのインスタンス
+	 */
+	public static UUIDCache getUUIDCache() {
+		return cache;
+	}
+
+	/**
+	 * ArenaManagerのインスタンスを取得するメソッド
+	 * @return ArenaManagerのインスタンス
+	 */
+	public static ArenaManager getArenaManager() {
+		return arenaManager;
+	}
+
+	/**
+	 * StatsManagerのインスタンスを取得するメソッド
+	 * @return StatsManagerのインスタンス
+	 */
+	public static StatsManager getStatsManager() {
+		return statsManager;
+	}
+
+	/**
+	 * コマンド実行時はじめに呼ばれるメソッド
+	 */
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equals("1vs1")) {
