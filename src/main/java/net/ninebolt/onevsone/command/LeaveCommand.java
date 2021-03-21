@@ -30,12 +30,12 @@ public class LeaveCommand implements SubCommand {
 		}
 
 		if(manager.getMatch((Player)sender) == null) {
-			sender.sendMessage("参加していません");
+			sender.sendMessage(Messages.notInMatch());
 			return true;
 		}
 
 		manager.leave((Player)sender);
-		sender.sendMessage("Left the game");
+		sender.sendMessage(Messages.leaveMatch());
 		return false;
 	}
 

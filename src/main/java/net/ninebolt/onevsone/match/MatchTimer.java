@@ -3,6 +3,8 @@ package net.ninebolt.onevsone.match;
 import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import net.ninebolt.onevsone.util.Messages;
+
 public class MatchTimer {
 	private Match match;
 
@@ -29,11 +31,11 @@ class MatchCountdown extends BukkitRunnable {
 	public void run() {
 		if(counter == 0) {
 			match.playSound(Sound.BLOCK_BELL_USE, 3.0f, 2.0f);
-			match.sendMessage("start!");
+			match.sendMessage(Messages.roundStart());
 			this.cancel();
 		} else {
 			match.playSound(Sound.UI_BUTTON_CLICK, 3.0f, 1.0f);
-			match.sendMessage((counter)+"...");
+			match.sendMessage(Messages.roundCountdown(counter));
 			counter--;
 		}
 	}

@@ -72,6 +72,10 @@ public class Messages {
 		return getString("prefix");
 	}
 
+	/*
+	 * Information messages
+	 */
+
 	public static String[] formattedStats(Stats stats) {
 		List<String> list = getStringList("statsMessage");
 		for(int i=0; i<list.size(); i++) {
@@ -93,6 +97,27 @@ public class Messages {
 	public static String arenaNotFound(String arenaName) {
 		String message = getString("arenaNotFound");
 		message = message.replace("%arena%", arenaName);
+		return getColoredText(getPrefix() + message);
+	}
+
+	public static String leaveMatch() {
+		String message = getString("leaveMatch");
+		return getColoredText(getPrefix() + message);
+	}
+
+	public static String notInMatch() {
+		String message = getString("notInMatch");
+		return getColoredText(getPrefix() + message);
+	}
+
+	public static String roundCountdown(int count) {
+		String message = getString("roundCountdown");
+		message = message.replace("%num%", Integer.toString(count));
+		return getColoredText(getPrefix() + message);
+	}
+
+	public static String roundStart() {
+		String message = getString("roundStart");
 		return getColoredText(getPrefix() + message);
 	}
 
