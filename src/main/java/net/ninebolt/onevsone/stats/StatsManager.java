@@ -8,6 +8,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class StatsManager {
 	private File statsFolder;
 
+	/**
+	 * 引数で指定したフォルダのStatsを管理するためのインスタンスを作成します。
+	 * @param statsFolder Statsファイルが保存されているフォルダ
+	 */
 	// コンストラクタに依存しない形で作れるのならSingleton化してもいいかも？
 	public StatsManager(File statsFolder) {
 		this.statsFolder = statsFolder;
@@ -16,6 +20,11 @@ public class StatsManager {
 		}
 	}
 
+	/**
+	 * 引数で指定されたUUIDからそのプレイヤーのStatsを取得します。
+	 * @param uuid 取得したいプレイヤーのUUID
+	 * @return そのプレイヤーのStatsオブジェクト。見つからない場合 null
+	 */
 	public Stats getStats(String uuid) {
 		File file = new File(statsFolder, uuid + ".yml");
 		if(!file.exists()) {
@@ -24,11 +33,21 @@ public class StatsManager {
 		return deserialize(file);
 	}
 
+	/**
+	 * ファイルに保存されたオブジェクトを、Statsオブジェクトとして読み込みます。
+	 * @param file Statsが保存されているファイル
+	 * @return 読み込まれたStatsオブジェクトのインスタンス
+	 */
 	public Stats deserialize(File file) {
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 		return config.getObject("stats", Stats.class);
 	}
 
+	/**
+	 * 引数で指定したUUIDを、statsFolderに保存します。
+	 * @param uuid プレイヤーのUUID
+	 * @param stats プレイヤーのStats
+	 */
 	public void save(String uuid, Stats stats) {
 		if(stats == null) {
 			// error

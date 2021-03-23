@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
+import net.ninebolt.onevsone.command.arena.ArenaCreateCommand;
+import net.ninebolt.onevsone.command.arena.ArenaDeleteCommand;
 import net.ninebolt.onevsone.command.arena.ArenaDisableCommand;
 import net.ninebolt.onevsone.command.arena.ArenaEnableCommand;
-import net.ninebolt.onevsone.command.arena.ArenaCreateCommand;
 import net.ninebolt.onevsone.command.arena.ArenaSetCommand;
-import net.ninebolt.onevsone.command.arena.ArenaDeleteCommand;
 import net.ninebolt.onevsone.util.Messages;
 
 public class ArenaRootCommand implements SubCommand {
@@ -19,8 +19,16 @@ public class ArenaRootCommand implements SubCommand {
 
 	private List<SubCommand> commandList;
 
+	/**
+	 * このコマンドを実行するためのインスタンスを作成します。
+	 */
 	public ArenaRootCommand() {
+		/*
+		 * #execute(CommandSender, String, String[])が呼び出された際に
+		 * 参照されるコマンドのリスト
+		 */
 		commandList = new ArrayList<SubCommand>();
+
 		commandList.add(new ArenaSetCommand());
 		commandList.add(new ArenaCreateCommand());
 		commandList.add(new ArenaDeleteCommand());
