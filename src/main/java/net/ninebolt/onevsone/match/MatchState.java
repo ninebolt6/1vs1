@@ -1,5 +1,13 @@
 package net.ninebolt.onevsone.match;
 
 public enum MatchState {
-	WAITING, INGAME
+	/**
+	 * Matchが待機中であることを表します。
+	 */
+	WAITING,
+
+	/**
+	 * Matchがゲーム中であることを表します。
+	 */
+	INGAME
 }

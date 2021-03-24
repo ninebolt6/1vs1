@@ -22,6 +22,10 @@ public class Match {
 	private Location[] locCache;
 	private PlayerInventory[] invCache;
 
+	/**
+	 * 引数で指定したアリーナを使用するMatchを作成します。
+	 * @param arena このマッチに使われるアリーナ
+	 */
 	public Match(Arena arena) {
 		this.arena = arena;
 		this.players = new Player[2];
@@ -32,22 +36,44 @@ public class Match {
 		invCache = new PlayerInventory[2];
 	}
 
+	/**
+	 * マッチの現在のMatchDataを返します。
+	 * @return このマッチの{@link MatchData}
+	 */
 	public MatchData getMatchData() {
 		return data;
 	}
 
+	/**
+	 * Matchの現在の状態を返します。
+	 * @see MatchState
+	 * @return マッチの状態
+	 */
 	public MatchState getState() {
 		return state;
 	}
 
+	/**
+	 * Matchの状態を設定します。
+	 * @param state マッチの状態
+	 */
 	public void setState(MatchState state) {
 		this.state = state;
 	}
 
+	/**
+	 * Matchに参加しているプレイヤーを返します。
+	 * @return 要素数2の配列 Player[2]。プレイヤーが参加していない場合、その要素は{@code null}になる
+	 */
 	public Player[] getPlayers() {
 		return players;
 	}
 
+	/**
+	 * Matchにプレイヤーを追加します。配列の空いている要素に追加されます。
+	 * 既にプレイヤーが2人参加している場合、何もしません。
+	 * @param player Matchに追加するプレイヤー
+	 */
 	public void addPlayer(Player player) {
 		if(players[0] != null && players[1] != null) {
 			return;
@@ -66,6 +92,11 @@ public class Match {
 		}
 	}
 
+	/**
+	 * Matchからプレイヤーを削除します。
+	 * 引数で指定したプレイヤーがMatchに参加していない場合、何もしません。
+	 * @param player Matchから削除するプレイヤー
+	 */
 	public void removePlayer(Player player) {
 		if(players[0] != null && players[0].equals(player)) {
 			players[0].getInventory().clear();
@@ -86,6 +117,11 @@ public class Match {
 		}
 	}
 
+	/**
+	 * 引数で指定したプレイヤーの相手プレイヤーを取得します。
+	 * @param player 相手を取得したいプレイヤー
+	 * @return 相手が存在した場合 {@link org.bukkit.entity.Player}。プレイヤーがMatchに参加していない、もしくは相手が参加していない場合 {@code null}
+	 */
 	public Player getOpponent(Player player) {
 		if(players[0] != null && players[0].equals(player)) {
 			return players[1];
@@ -97,6 +133,11 @@ public class Match {
 		return null;
 	}
 
+	/**
+	 * 引数で指定したプレイヤーの、マッチにおける識別番号を取得します。
+	 * @param player 番号を取得するプレイヤー
+	 * @return {@link Match#PLAYER_ONE}もしくは{@link Match#PLAYER_TWO}。プレイヤーがMatchに参加していない場合 {@code -1}
+	 */
 	public int getPlayerNumber(Player player) {
 		if(players[0].equals(player)) {
 			return PLAYER_ONE;
@@ -109,18 +150,35 @@ public class Match {
 		return -1;
 	}
 
+	/**
+	 * Matchで使われるArenaを取得します。
+	 * @return Arenaのインスタンス
+	 */
 	public Arena getArena() {
 		return arena;
 	}
 
+	/**
+	 * プレイヤーがMatchに参加できるかどうかを返します。
+	 * @return Arenaが有効で、かつMatchStateが待機中の場合{@code true}。それ以外は{@code false}
+	 */
 	public boolean isJoinable() {
 		return (arena.isEnabled() && state.equals(MatchState.WAITING));
 	}
 
-	public boolean canStart() {
+	/**
+	 * Matchが開始できるかどうかを返します。
+	 * @return プレイヤーが2人揃っている場合は{@code true}。それ以外は{@code false}
+	 */
+	public boolean isReadyToStart() {
 		return (players[0] != null && players[1] != null);
 	}
 
+	/**
+	 * Matchに参加しているプレイヤー全員に向けて、メッセージを送信します。
+	 * @param message 送信するメッセージ
+	 * @see org.bukkit.command.CommandSender#sendMessage(String)
+	 */
 	public void sendMessage(String message) {
 		for(Player player : players) {
 			if(player != null) {
@@ -129,12 +187,22 @@ public class Match {
 		}
 	}
 
+	/**
+	 * Matchに参加しているプレイヤー全員に向けて、音を再生します。
+	 * @param sound 再生する音
+	 * @param volume 音量
+	 * @param pitch 音の高さ
+	 * @see org.bukkit.entity.Player#playSound(Location, Sound, float, float)
+	 */
 	public void playSound(Sound sound, float volume, float pitch) {
 		for(Player player : players) {
 			player.playSound(player.getLocation(), sound, volume, pitch);
 		}
 	}
 
+	/**
+	 * マッチを開始します。プレイヤーが2人参加していることを{@link #isReadyToStart()}で確認してから開始してください。
+	 */
 	public void start() {
 		for(Player player : players) {
 			player.getInventory().clear();
@@ -144,11 +212,15 @@ public class Match {
 		}
 
 		MatchTimer timer = new MatchTimer(this);
-		timer.getCountdownTimer().runTaskTimerAsynchronously(OneVsOne.getInstance(), 0, 20);
+		timer.getCountdownTimer(3).runTaskTimerAsynchronously(OneVsOne.getInstance(), 0, 20);
 		state = MatchState.INGAME;
 		getMatchData().setRound(1);
 	}
 
+	/**
+	 * マッチを停止します。プレイヤーは参加直前に居た状態(インベントリ、位置)に戻ります。
+	 * @see #removePlayer(Player)
+	 */
 	public void stop() {
 		for(Player player : players) {
 			if(player != null) {
@@ -159,6 +231,10 @@ public class Match {
 		data = new MatchData();
 	}
 
+	/**
+	 * 次のラウンドを開始します。最後のラウンドが終わり呼び出された場合には、
+	 * {@link #stop()}が呼び出されマッチが終了します。
+	 */
 	public void startNextRound() {
 		if(getMatchData().getRound() > MAX_ROUND) {
 			stop();

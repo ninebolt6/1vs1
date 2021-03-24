@@ -92,7 +92,7 @@ public class MatchSelector implements Listener {
 		MatchManager matchManager = MatchManager.getInstance();
 		Match match = matchManager.getMatch(arena);
 		matchManager.join(player, match);
-		if(match.canStart()) {
+		if(match.isReadyToStart()) {
 			match.start();
 		}
 	}
