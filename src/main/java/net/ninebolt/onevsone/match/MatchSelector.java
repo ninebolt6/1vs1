@@ -28,17 +28,20 @@ import net.ninebolt.onevsone.util.Messages;
 public class MatchSelector implements Listener {
 
 	private static final int ROW = 3;
-	private static final String INVENTORY_NAME = "&bGame Selector";
+	private static final String INVENTORY_NAME = "&bMatch Selector";
 
 	private static Map<Player, InventoryView> openList = new HashMap<Player, InventoryView>();
 	private Inventory inventory;
 
 	public MatchSelector() {
 		inventory = Bukkit.createInventory(null, ROW*9, Messages.getColoredText(INVENTORY_NAME));
-		initContents();
+		initContents(inventory);
 	}
 
-	public void initContents() {
+	/**
+	 * Matchの状態を元に、
+	 */
+	public void initContents(Inventory inv) {
 		MatchManager matchManager = MatchManager.getInstance();
 		for(Match match : matchManager.getMatches()) {
 			ItemStack arenaItem;
@@ -49,23 +52,40 @@ public class MatchSelector implements Listener {
 				arenaItem = createItem(Material.RED_WOOL, arena.getDisplayName(), "参加不可", match.getState().toString());
 			}
 			setArenaMeta(arenaItem, arena);
-			inventory.addItem(arenaItem);
+			inv.addItem(arenaItem);
 		}
 	}
 
+	/**
+	 * Match選択に使われるインベントリを取得します。
+	 * @return Match選択用のインベントリ
+	 */
 	public Inventory getInventory() {
 		return inventory;
 	}
 
+	/**
+	 * 今開かれているMatchSelectorのCollection<InventoryView>を返します。
+	 * @return InventoryViewのCollection
+	 * @see org.bukkit.inventory.InventoryView
+	 */
 	public static Collection<InventoryView> getInventoryViewList() {
 		return openList.values();
 	}
 
+	/**
+	 * 引数で指定したプレイヤーに対してMatch選択インベントリを開き、PlayerとInventoryViewの組を{@link #openList}に登録します。
+	 * @param player インベントリを開くプレイヤー
+	 */
 	public void open(Player player) {
 		InventoryView view = player.openInventory(inventory);
 		openList.put(player, view);
 	}
 
+	/**
+	 * MatchSelectorがクリックされたときに呼び出されるメソッドです。
+	 * @param event インベントリをクリックした際に呼び出されるイベント
+	 */
 	@EventHandler
 	public void onSelectorClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
@@ -97,6 +117,10 @@ public class MatchSelector implements Listener {
 		}
 	}
 
+	/**
+	 * MatchSelectorが閉じられたときに呼び出されるメソッドです。
+	 * @param event インベントリを閉じた際に呼び出されるイベント
+	 */
 	@EventHandler
 	public void onSelectorClose(InventoryCloseEvent event) {
 		Player player = (Player) event.getPlayer();
@@ -105,6 +129,13 @@ public class MatchSelector implements Listener {
 		}
 	}
 
+	/**
+	 * 引数で指定した情報に基づきItemStackを作成します。
+	 * @param material アイテムの材料
+	 * @param name アイテムの名前
+	 * @param lore アイテムの説明
+	 * @return 作成されたアイテムのItemStack
+	 */
 	protected ItemStack createItem(Material material, String name, String... lore) {
 		ItemStack item = new ItemStack(material);
 		ItemMeta meta = item.getItemMeta();
@@ -114,6 +145,11 @@ public class MatchSelector implements Listener {
 		return item;
 	}
 
+	/**
+	 * 引数で指定されたItemStackに対して、Arenaの情報を紐付けるデータを付与します。
+	 * @param item Matchを示すアイテム
+	 * @param arena 紐付けるArena
+	 */
 	protected void setArenaMeta(ItemStack item, final Arena arena) {
 		NamespacedKey key = new NamespacedKey(OneVsOne.getInstance(), "arenaName");
 		ItemMeta meta = item.getItemMeta();

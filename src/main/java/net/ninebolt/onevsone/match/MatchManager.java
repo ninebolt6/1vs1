@@ -18,16 +18,28 @@ public class MatchManager {
 	private static List<Match> matches;
 	private static Map<Player, Match> playerMap;
 
+	/**
+	 * MatchManagerのインスタンスを作成します。
+	 * 外部からのインスタンス取得には{@link #getInstance()}を使用してください。
+	 * @see MatchManager#getInstance()
+	 */
 	private MatchManager() {
 		matches = new ArrayList<Match>();
 		playerMap = new HashMap<Player, Match>();
 		initMatches();
 	}
 
+	/**
+	 * MatchManagerのインスタンスを取得します。
+	 * @return MatchManagerのインスタンス
+	 */
 	public static MatchManager getInstance() {
 		return INSTANCE;
 	}
 
+	/**
+	 * ArenaManagerに登録されているArenaを元に、Matchを作成し管理の準備をします。
+	 */
 	protected void initMatches() {
 		ArenaManager arenaManager = OneVsOne.getArenaManager();
 		for(Arena arena : arenaManager.getArenaList()) {
@@ -35,21 +47,40 @@ public class MatchManager {
 		}
 	}
 
+	/**
+	 * MatchManagerに登録されているMatchを取得します。
+	 * @return 管理されているMatchのList
+	 */
 	public List<Match> getMatches() {
 		return matches;
 	}
 
+	/**
+	 * プレイヤーがMatchに参加しているかどうかを返します。
+	 * @param player 調べたいプレイヤー
+	 * @return Matchに参加している場合{@code true}。参加していない場合{@code false}
+	 */
 	public boolean isPlaying(Player player) {
 		return playerMap.containsKey(player);
 	}
 
+	/**
+	 * プレイヤーが参加しているMatchを取得します。
+	 * @param player 対象のプレイヤー
+	 * @return プレイヤーがMatchに参加している場合はその{@code Match}。参加していない場合は{@code null}
+	 */
 	public Match getMatch(Player player) {
 		if(!isPlaying(player)) {
 			return null;
 		}
-		return getPlayerMap().get(player);
+		return playerMap.get(player);
 	}
 
+	/**
+	 * 引数で指定したArenaが使われているMatchを取得します。
+	 * @param arena Matchを取得したいArena
+	 * @return Arenaが使われているMatch
+	 */
 	public Match getMatch(Arena arena) {
 		for(Match match : matches) {
 			if(match.getArena().equals(arena)) {
@@ -59,20 +90,25 @@ public class MatchManager {
 		return null;
 	}
 
+	/**
+	 * Matchに参加します。
+	 * @param player 参加するプレイヤー
+	 * @param match 参加するMatch
+	 */
 	public void join(Player player, Match match) {
 		playerMap.put(player, match);
 		match.addPlayer(player);
 	}
 
+	/**
+	 * Matchから退出します。プレイヤーがどのMatchにも参加していない場合、何もしません。
+	 * @param player 退出するプレイヤー
+	 */
 	public void leave(Player player) {
 		if(!playerMap.containsKey(player)) {
 			return;
 		}
 		getMatch(player).removePlayer(player);
 		playerMap.remove(player);
-	}
-
-	public Map<Player, Match> getPlayerMap() {
-		return playerMap;
 	}
 }
