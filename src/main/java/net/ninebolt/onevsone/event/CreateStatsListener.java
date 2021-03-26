@@ -11,6 +11,10 @@ import net.ninebolt.onevsone.stats.StatsManager;
 
 public class CreateStatsListener implements Listener {
 
+	/**
+	 * プレイヤーがサーバーに参加した際に、Statsを作成するメソッドです。
+	 * @param event プレイヤーがサーバーに参加した際に呼び出されるイベント
+	 */
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
 		// create data for 1vs1 stats

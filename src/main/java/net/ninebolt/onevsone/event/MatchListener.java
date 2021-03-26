@@ -18,6 +18,10 @@ import net.ninebolt.onevsone.match.MatchState;
 
 public class MatchListener implements Listener {
 
+	/**
+	 * プレイヤーがMatch参加中にブロックを壊した場合、キャンセルするメソッドです。
+	 * @param event ブロックが壊された際に呼び出されるイベント
+	 */
 	@EventHandler
 	public void onBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
@@ -28,6 +32,7 @@ public class MatchListener implements Listener {
 			return;
 		}
 
+		// 火を消した場合、何もしない
 		if(!block.getType().equals(Material.FIRE)) {
 			return;
 		}
@@ -35,6 +40,10 @@ public class MatchListener implements Listener {
 		event.setCancelled(true);
 	}
 
+	/**
+	 * プレイヤーがMatch参加中にブロックを置いた場合、キャンセルするメソッドです。
+	 * @param event ブロックが置かれた際に呼び出されるイベント
+	 */
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
@@ -52,6 +61,10 @@ public class MatchListener implements Listener {
 		event.setCancelled(true);
 	}
 
+	/**
+	 * プレイヤーが死亡した際に、Matchを終了するメソッドです。
+	 * @param event プレイヤーが死亡した際に呼び出されるイベント
+	 */
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onDeath(PlayerDeathEvent event) {
 		Player player = event.getEntity();
@@ -61,11 +74,17 @@ public class MatchListener implements Listener {
 			return;
 		}
 
+		// An unexpected behavior happened
+		// プレイヤーが死亡することはありえないのでMatchを停止する
 		Match match = manager.getMatch(player);
 		event.getDrops().clear();
 		match.stop();
 	}
 
+	/**
+	 * プレイヤーがMatch中に死亡するほどのダメージを受けた際に呼び出されるメソッドです。
+	 * @param event エンティティがダメージを受けた際に呼び出されるイベント
+	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onDamageInArena(EntityDamageEvent event) {
 		MatchManager manager = MatchManager.getInstance();
@@ -87,6 +106,10 @@ public class MatchListener implements Listener {
 		}
 	}
 
+	/**
+	 * プレイヤーがサーバーから退出する際に、Matchから離脱するメソッドです。
+	 * @param event プレイヤーがサーバーから退出する際に呼び出されるイベント
+	 */
 	@EventHandler
 	public void onQuitWhileMatch(PlayerQuitEvent event) {
 		Player player = event.getPlayer();

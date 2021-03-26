@@ -10,6 +10,10 @@ import net.ninebolt.onevsone.util.UUIDCache;
 
 public class CacheUniqueIdListener implements Listener {
 
+	/**
+	 * プレイヤーがサーバーに参加した際に、UUIDをキャッシュに保存するメソッドです。
+	 * @param event プレイヤーがサーバーに参加した際に呼び出されるイベント
+	 */
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
