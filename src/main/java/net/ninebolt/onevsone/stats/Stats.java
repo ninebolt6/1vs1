@@ -26,7 +26,7 @@ public class Stats implements ConfigurationSerializable {
 	}
 
 	/**
-	 * StatsオブジェクトがYamlConfigurationから読み込まれる際に呼び出されます。
+	 * Mapに保存された情報をStatsオブジェクトにデシリアライズします。
 	 * @param map Statsの情報が保存されているMap
 	 * @see org.bukkit.configuration.serialization.ConfigurationSerializable
 	 */
@@ -119,7 +119,7 @@ public class Stats implements ConfigurationSerializable {
 	}
 
 	/**
-	 * Statsオブジェクトがシリアライズされる際に呼び出されます。
+	 * Statsオブジェクトをシリアライズします。
 	 * @see org.bukkit.configuration.serialization.ConfigurationSerializable
 	 */
 	@Override

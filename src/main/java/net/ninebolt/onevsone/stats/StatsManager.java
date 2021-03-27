@@ -12,7 +12,7 @@ public class StatsManager {
 	 * 引数で指定したフォルダのStatsを管理するためのインスタンスを作成します。
 	 * @param statsFolder Statsファイルが保存されているフォルダ
 	 */
-	// コンストラクタに依存しない形で作れるのならSingleton化してもいいかも？
+	// 引数に依存しない形で作れるのならSingleton化してもいいかも？
 	public StatsManager(File statsFolder) {
 		this.statsFolder = statsFolder;
 		if(!statsFolder.exists()) {
