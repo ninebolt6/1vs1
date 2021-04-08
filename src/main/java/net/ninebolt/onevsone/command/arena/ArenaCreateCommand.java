@@ -7,6 +7,7 @@ import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
 import net.ninebolt.onevsone.command.SubCommand;
+import net.ninebolt.onevsone.util.Messages;
 
 public class ArenaCreateCommand implements SubCommand {
 
@@ -32,13 +33,13 @@ public class ArenaCreateCommand implements SubCommand {
 
 		ArenaManager manager = OneVsOne.getArenaManager();
 		if(manager.contains(args[2])) {
-			sender.sendMessage(ChatColor.RED + "そのアリーナはすでに存在しています");
+			sender.sendMessage(Messages.arenaAlreadyExists(args[2]));
 			return true;
 		}
 
 		Arena arena = new Arena(args[2]);
 		manager.register(arena);
-		sender.sendMessage(ChatColor.GREEN + "アリーナ: " + args[2] + " を作成しました");
+		sender.sendMessage(Messages.createdArena(args[2]));
 		return true;
 	}
 

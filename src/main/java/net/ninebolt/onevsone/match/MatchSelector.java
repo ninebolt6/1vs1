@@ -39,7 +39,7 @@ public class MatchSelector implements Listener {
 	}
 
 	/**
-	 * Matchの状態を元に、
+	 * Matchの状態を元に、インベントリにMatch選択用のアイテムを追加する
 	 */
 	public void initContents(Inventory inv) {
 		MatchManager matchManager = MatchManager.getInstance();

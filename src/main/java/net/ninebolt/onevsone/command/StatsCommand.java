@@ -51,7 +51,7 @@ public class StatsCommand implements SubCommand {
 			//プレイヤー名からUUIDを取得 from UUIDCache
 			String uuid = OneVsOne.getUUIDCache().getUUIDByName(args[1]);
 			if(uuid == null) {
-				sender.sendMessage("戦績が見つかりませんでした。");
+				sender.sendMessage(Messages.statsNotFound(args[1]));
 				return true;
 			}
 

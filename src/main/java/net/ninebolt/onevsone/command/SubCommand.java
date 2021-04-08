@@ -4,13 +4,13 @@ import org.bukkit.command.CommandSender;
 
 public interface SubCommand {
 	/**
-	 * このコマンドのエイリアスを取得します。
+	 * コマンドのエイリアスを取得します。
 	 * @return コマンドのエイリアス
 	 */
 	public String getName();
 
 	/**
-	 * このコマンドの権限ノードを取得します。
+	 * コマンドの権限ノードを取得します。
 	 * @return 権限ノード
 	 */
 	public String getPermissionNode();

@@ -148,6 +148,24 @@ public class Messages {
 		return getColoredText(getPrefix() + message);
 	}
 
+	public static String statsNotFound(String playerName) {
+		String message = getString("statsNotFound");
+		message = message.replace("%player%", playerName);
+		return getColoredText(getPrefix() + message);
+	}
+
+	public static String arenaAlreadyExists(String arenaName) {
+		String message = getString("arenaAlreadyExists");
+		message = message.replace("%arena%", arenaName);
+		return getColoredText(getPrefix() + message);
+	}
+
+	public static String createdArena(String arenaName) {
+		String message = getString("createdArena");
+		message = message.replace("%arena%", arenaName);
+		return getColoredText(getPrefix() + message);
+	}
+
 	/*
 	 * System error messages
 	 */
