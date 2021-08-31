@@ -96,6 +96,10 @@ public class MatchManager {
 	 * @param match 参加するMatch
 	 */
 	public void join(Player player, Match match) {
+		if(isPlaying(player)) {
+			return;
+		}
+
 		playerMap.put(player, match);
 		match.addPlayer(player);
 	}
@@ -105,10 +109,21 @@ public class MatchManager {
 	 * @param player 退出するプレイヤー
 	 */
 	public void leave(Player player) {
-		if(!playerMap.containsKey(player)) {
+		if(!isPlaying(player)) {
 			return;
 		}
+
 		getMatch(player).removePlayer(player);
 		playerMap.remove(player);
+	}
+
+	/**
+	 * Statsを保存します。Matchに参加していない場合、何もしません。
+	 * @param player
+	 */
+	public void saveStats(Player player) {
+		if(!isPlaying(player)) {
+			return;
+		}
 	}
 }

@@ -170,7 +170,7 @@ public class Match {
 
 	/**
 	 * Matchが開始できるかどうかを返します。
-	 * @return プレイヤーが2人揃っている場合は{@code true}。それ以外は{@code false}
+	 * @return {@link MatchState}が{@code WAITING}の状態でプレイヤーが2人揃っている場合は{@code true}。それ以外は{@code false}
 	 */
 	public boolean isReadyToStart() {
 		return (players[0] != null && players[1] != null && getState() == MatchState.WAITING);
