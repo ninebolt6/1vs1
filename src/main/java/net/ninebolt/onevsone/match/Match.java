@@ -1,5 +1,6 @@
 package net.ninebolt.onevsone.match;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -12,7 +13,7 @@ import net.ninebolt.onevsone.arena.Arena;
 public class Match {
 	public static final int PLAYER_ONE = 1;
 	public static final int PLAYER_TWO = 2;
-	private final int MAX_ROUND = 3;
+	private final int MAX_ROUND = 2;
 
 	private Arena arena;
 	private MatchState state;
@@ -98,6 +99,7 @@ public class Match {
 	 * @param player Matchから削除するプレイヤー
 	 */
 	public void removePlayer(Player player) {
+		// TODO player.equals(players[0])に変更する(この場合null判定はいらない)
 		if(players[0] != null && players[0].equals(player)) {
 			players[0].getInventory().clear();
 			players[0].getInventory().setContents(invCache[0].getContents());
@@ -209,6 +211,8 @@ public class Match {
 			player.getInventory().setContents(getArena().getInventory().getContents());
 			player.getInventory().setArmorContents(getArena().getInventory().getArmorContents());
 			player.getInventory().setExtraContents(getArena().getInventory().getExtraContents());
+			player.setGameMode(GameMode.SURVIVAL);
+			getMatchData().initData(player);
 		}
 
 		MatchTimer timer = new MatchTimer(this);
@@ -222,6 +226,7 @@ public class Match {
 	 * @see #removePlayer(Player)
 	 */
 	public void stop() {
+		sendMessage("マッチ終了！");
 		for(Player player : players) {
 			if(player != null) {
 				removePlayer(player);
@@ -238,8 +243,10 @@ public class Match {
 	public void startNextRound() {
 		if(getMatchData().getRound() > MAX_ROUND) {
 			stop();
+			return;
 		}
 		getMatchData().setRound(getMatchData().getRound()+1);
+		sendMessage("Match " + getMatchData().getRound() + " start!");
 
 		for(Player player : players) {
 			player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());

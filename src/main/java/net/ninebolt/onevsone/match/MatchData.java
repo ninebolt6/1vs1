@@ -19,6 +19,11 @@ public class MatchData {
 		this.deathMap = new HashMap<Player, Integer>();
 	}
 
+	public void initData(Player player) {
+		killMap.put(player, 0);
+		deathMap.put(player, 0);
+	}
+
 	/**
 	 * 現在のラウンド数を返します。
 	 * @return ラウンド数
