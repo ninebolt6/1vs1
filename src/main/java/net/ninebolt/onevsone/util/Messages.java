@@ -106,7 +106,13 @@ public class Messages {
 	public static String[] formattedStats(Stats stats) {
 		List<String> list = getStringList("statsMessage");
 		for(int i=0; i<list.size(); i++) {
-			list.set(i, getColoredText(list.get(i)));
+			String line = list.get(i);
+			line = line.replace("%player%", stats.getPlayerName())
+					.replace("%kill%", String.valueOf(stats.getKills()))
+					.replace("%death%", String.valueOf(stats.getDeaths()))
+					.replace("%win%", String.valueOf(stats.getWins()))
+					.replace("%defeat%", String.valueOf(stats.getDefeats()));
+			list.set(i, getColoredText(line));
 		}
 		return list.toArray(new String[list.size()]);
 	}
