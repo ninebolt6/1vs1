@@ -111,6 +111,11 @@ public class MatchSelector implements Listener {
 		Arena arena = arenaManager.getArena(container.get(key, PersistentDataType.STRING));
 		MatchManager matchManager = MatchManager.getInstance();
 		Match match = matchManager.getMatch(arena);
+
+		if(matchManager.isPlaying(player)) {
+			return;
+		}
+
 		matchManager.join(player, match);
 		if(match.isReadyToStart()) {
 			match.start();

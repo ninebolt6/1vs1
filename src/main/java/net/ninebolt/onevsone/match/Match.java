@@ -173,7 +173,7 @@ public class Match {
 	 * @return プレイヤーが2人揃っている場合は{@code true}。それ以外は{@code false}
 	 */
 	public boolean isReadyToStart() {
-		return (players[0] != null && players[1] != null);
+		return (players[0] != null && players[1] != null && getState() == MatchState.WAITING);
 	}
 
 	/**
