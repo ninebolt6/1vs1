@@ -36,7 +36,7 @@ public class MatchListener implements Listener {
 		}
 
 		// 火を消した場合、何もしない
-		if(!block.getType().equals(Material.FIRE)) {
+		if(block.getType().equals(Material.FIRE)) {
 			return;
 		}
 
