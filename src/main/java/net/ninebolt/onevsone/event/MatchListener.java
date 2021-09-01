@@ -12,12 +12,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.match.Match;
 import net.ninebolt.onevsone.match.MatchManager;
 import net.ninebolt.onevsone.match.MatchState;
-import net.ninebolt.onevsone.stats.Stats;
-import net.ninebolt.onevsone.stats.StatsManager;
 
 public class MatchListener implements Listener {
 
@@ -120,29 +117,6 @@ public class MatchListener implements Listener {
 
 		if(manager.isPlaying(player)) {
 			manager.leave(player);
-		}
-	}
-
-	@EventHandler
-	public void onMatchStart(MatchStartEvent event) {
-		event.getMatch().sendMessage("マッチ開始！");
-	}
-
-	@EventHandler
-	public void onMatchEnd(MatchEndEvent event) {
-		event.getMatch().sendMessage("マッチ終了！");
-
-		// save stats
-		for(Player player : event.getMatch().getPlayers()) {
-			if(player != null) {
-				StatsManager manager = OneVsOne.getStatsManager();
-				Stats stats = manager.getStats(player.getUniqueId().toString());
-				stats.addKills(event.getMatch().getMatchData().getKill(player));
-				stats.addDeaths(event.getMatch().getMatchData().getDeath(player));
-				// stats.addWins();
-				// stats.addDefeats();
-				manager.save(player.getUniqueId().toString(), stats);
-			}
 		}
 	}
 }
