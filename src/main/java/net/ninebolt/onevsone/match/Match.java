@@ -1,5 +1,6 @@
 package net.ninebolt.onevsone.match;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -9,6 +10,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
+import net.ninebolt.onevsone.event.MatchEndEvent;
+import net.ninebolt.onevsone.event.MatchStartEvent;
 
 public class Match {
 	public static final int PLAYER_ONE = 1;
@@ -206,6 +209,10 @@ public class Match {
 	 * マッチを開始します。プレイヤーが2人参加していることを{@link #isReadyToStart()}で確認してから開始してください。
 	 */
 	public void start() {
+		// call event
+		MatchStartEvent event = new MatchStartEvent(this);
+		Bukkit.getPluginManager().callEvent(event);
+
 		for(Player player : players) {
 			player.getInventory().clear();
 			player.getInventory().setContents(getArena().getInventory().getContents());
@@ -226,7 +233,10 @@ public class Match {
 	 * @see #removePlayer(Player)
 	 */
 	public void stop() {
-		sendMessage("マッチ終了！");
+		// call event
+		MatchEndEvent event = new MatchEndEvent(this);
+		Bukkit.getPluginManager().callEvent(event);
+
 		for(Player player : players) {
 			if(player != null) {
 				removePlayer(player);
