@@ -116,14 +116,4 @@ public class MatchManager {
 		getMatch(player).removePlayer(player);
 		playerMap.remove(player);
 	}
-
-	/**
-	 * Statsを保存します。Matchに参加していない場合、何もしません。
-	 * @param player
-	 */
-	public void saveStats(Player player) {
-		if(!isPlaying(player)) {
-			return;
-		}
-	}
 }
