@@ -9,6 +9,7 @@ public class MatchData {
 	private int round;
 	private Map<Player, Integer> killMap;
 	private Map<Player, Integer> deathMap;
+	private Player winner;
 
 	/**
 	 * 空のMatchDataを作成します。
@@ -17,6 +18,7 @@ public class MatchData {
 		this.round = 0;
 		this.killMap = new HashMap<Player, Integer>();
 		this.deathMap = new HashMap<Player, Integer>();
+		this.winner = null;
 	}
 
 	public void initData(Player player) {
@@ -74,5 +76,13 @@ public class MatchData {
 	 */
 	public void setDeath(Player player, int death) {
 		deathMap.put(player, death);
+	}
+
+	public Player getWinner() {
+		return winner;
+	}
+
+	public void setWinner(Player player) {
+		this.winner = player;
 	}
 }

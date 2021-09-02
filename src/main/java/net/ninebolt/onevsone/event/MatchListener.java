@@ -132,11 +132,10 @@ public class MatchListener implements Listener {
 
 	@EventHandler
 	public void onMatchEnd(MatchEndEvent event) {
-		event.getMatch().sendMessage("マッチ終了！");
-
 		if(event.getCause() == MatchEndCause.INTERRUPTED) {
 			// statsを保存しない
 		} else {
+			event.getMatch().sendMessage("マッチ終了！ " + event.getMatch().getMatchData().getWinner().getDisplayName() + "の勝利！");
 			// save stats
 			for(Player player : event.getMatch().getPlayers()) {
 				if(player != null) {
@@ -144,8 +143,11 @@ public class MatchListener implements Listener {
 					Stats stats = manager.getStats(player.getUniqueId().toString());
 					stats.addKills(event.getMatch().getMatchData().getKill(player));
 					stats.addDeaths(event.getMatch().getMatchData().getDeath(player));
-					// stats.addWins();
-					// stats.addDefeats();
+					if(event.getMatch().getMatchData().getWinner().equals(player)) {
+						stats.addWins(1);
+					} else {
+						stats.addDefeats(1);
+					}
 					manager.save(player.getUniqueId().toString(), stats);
 				}
 			}

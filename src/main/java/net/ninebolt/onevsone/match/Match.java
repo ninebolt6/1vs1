@@ -16,7 +16,7 @@ import net.ninebolt.onevsone.event.MatchStartEvent;
 public class Match {
 	public static final int PLAYER_ONE = 1;
 	public static final int PLAYER_TWO = 2;
-	private final int MAX_ROUND = 2;
+	private final int FIRST_TO = 2;
 
 	private Arena arena;
 	private MatchState state;
@@ -248,12 +248,19 @@ public class Match {
 	 * {@link #stop()}が呼び出されマッチが終了します。
 	 */
 	public void startNextRound() {
-		if(getMatchData().getRound() > MAX_ROUND) {
+		// 終了判定
+		if(getMatchData().getKill(players[0]) >= FIRST_TO) {
+			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
+			Bukkit.getPluginManager().callEvent(event);
+			stop();
+			return;
+		} else if(getMatchData().getKill(players[1]) >= FIRST_TO) {
 			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
 			Bukkit.getPluginManager().callEvent(event);
 			stop();
 			return;
 		}
+
 		getMatchData().setRound(getMatchData().getRound()+1);
 		sendMessage("Match " + getMatchData().getRound() + " start!");
 
