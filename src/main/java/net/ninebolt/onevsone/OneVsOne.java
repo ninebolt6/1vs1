@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -18,8 +19,10 @@ import net.ninebolt.onevsone.command.GameGUICommand;
 import net.ninebolt.onevsone.command.RootCommand;
 import net.ninebolt.onevsone.event.CacheUniqueIdListener;
 import net.ninebolt.onevsone.event.CreateStatsListener;
+import net.ninebolt.onevsone.event.MatchEndEvent;
 import net.ninebolt.onevsone.event.MatchListener;
 import net.ninebolt.onevsone.match.Match;
+import net.ninebolt.onevsone.match.MatchEndCause;
 import net.ninebolt.onevsone.match.MatchManager;
 import net.ninebolt.onevsone.match.MatchSelector;
 import net.ninebolt.onevsone.stats.Stats;
@@ -96,6 +99,8 @@ public class OneVsOne extends JavaPlugin {
 		}
 		// すべてのマッチを安全に無効化
 		for(Match match : matchManager.getMatches()) {
+			MatchEndEvent event = new MatchEndEvent(match, MatchEndCause.INTERRUPTED);
+			Bukkit.getPluginManager().callEvent(event);
 			match.stop();
 		}
 	}

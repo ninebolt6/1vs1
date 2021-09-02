@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.match.Match;
+import net.ninebolt.onevsone.match.MatchEndCause;
 import net.ninebolt.onevsone.match.MatchManager;
 import net.ninebolt.onevsone.match.MatchState;
 import net.ninebolt.onevsone.stats.Stats;
@@ -133,16 +134,20 @@ public class MatchListener implements Listener {
 	public void onMatchEnd(MatchEndEvent event) {
 		event.getMatch().sendMessage("マッチ終了！");
 
-		// save stats
-		for(Player player : event.getMatch().getPlayers()) {
-			if(player != null) {
-				StatsManager manager = OneVsOne.getStatsManager();
-				Stats stats = manager.getStats(player.getUniqueId().toString());
-				stats.addKills(event.getMatch().getMatchData().getKill(player));
-				stats.addDeaths(event.getMatch().getMatchData().getDeath(player));
-				// stats.addWins();
-				// stats.addDefeats();
-				manager.save(player.getUniqueId().toString(), stats);
+		if(event.getCause() == MatchEndCause.INTERRUPTED) {
+			// statsを保存しない
+		} else {
+			// save stats
+			for(Player player : event.getMatch().getPlayers()) {
+				if(player != null) {
+					StatsManager manager = OneVsOne.getStatsManager();
+					Stats stats = manager.getStats(player.getUniqueId().toString());
+					stats.addKills(event.getMatch().getMatchData().getKill(player));
+					stats.addDeaths(event.getMatch().getMatchData().getDeath(player));
+					// stats.addWins();
+					// stats.addDefeats();
+					manager.save(player.getUniqueId().toString(), stats);
+				}
 			}
 		}
 	}

@@ -4,13 +4,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import net.ninebolt.onevsone.match.Match;
+import net.ninebolt.onevsone.match.MatchEndCause;
 
 public class MatchEndEvent extends Event {
 
 	private Match match;
+	private MatchEndCause cause;
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	public MatchEndEvent(Match match) {
+	public MatchEndEvent(Match match, MatchEndCause cause) {
 		this.match = match;
 	}
 
@@ -27,4 +29,7 @@ public class MatchEndEvent extends Event {
 		return match;
 	}
 
+	public MatchEndCause getCause() {
+		return cause;
+	}
 }

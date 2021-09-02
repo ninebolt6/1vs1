@@ -234,9 +234,6 @@ public class Match {
 	 */
 	public void stop() {
 		// call event
-		MatchEndEvent event = new MatchEndEvent(this);
-		Bukkit.getPluginManager().callEvent(event);
-
 		for(Player player : players) {
 			if(player != null) {
 				removePlayer(player);
@@ -252,6 +249,8 @@ public class Match {
 	 */
 	public void startNextRound() {
 		if(getMatchData().getRound() > MAX_ROUND) {
+			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
+			Bukkit.getPluginManager().callEvent(event);
 			stop();
 			return;
 		}
