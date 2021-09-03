@@ -82,7 +82,9 @@ public class MatchListener implements Listener {
 		// プレイヤーが死亡することはありえないのでMatchを停止する
 		Match match = manager.getMatch(player);
 		event.getDrops().clear();
-		match.stop();
+		for(Player p : match.getPlayers()) {
+			manager.leave(p);
+		}
 	}
 
 	/**
@@ -132,15 +134,17 @@ public class MatchListener implements Listener {
 
 	@EventHandler
 	public void onMatchEnd(MatchEndEvent event) {
+		MatchManager matchManager = MatchManager.getInstance();
+
 		if(event.getCause() == MatchEndCause.INTERRUPTED) {
 			// statsを保存しない
 		} else {
 			event.getMatch().sendMessage("マッチ終了！ " + event.getMatch().getMatchData().getWinner().getDisplayName() + "の勝利！");
-			// save stats
 			for(Player player : event.getMatch().getPlayers()) {
 				if(player != null) {
-					StatsManager manager = OneVsOne.getStatsManager();
-					Stats stats = manager.getStats(player.getUniqueId().toString());
+					// save stats
+					StatsManager statsManager = OneVsOne.getStatsManager();
+					Stats stats = statsManager.getStats(player.getUniqueId().toString());
 					stats.addKills(event.getMatch().getMatchData().getKill(player));
 					stats.addDeaths(event.getMatch().getMatchData().getDeath(player));
 					if(event.getMatch().getMatchData().getWinner().equals(player)) {
@@ -148,9 +152,13 @@ public class MatchListener implements Listener {
 					} else {
 						stats.addDefeats(1);
 					}
-					manager.save(player.getUniqueId().toString(), stats);
+					statsManager.save(player.getUniqueId().toString(), stats);
+
+					matchManager.leave(player);
 				}
 			}
 		}
+
+		event.getMatch().initMatch();
 	}
 }

@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -101,7 +102,9 @@ public class OneVsOne extends JavaPlugin {
 		for(Match match : matchManager.getMatches()) {
 			MatchEndEvent event = new MatchEndEvent(match, MatchEndCause.INTERRUPTED);
 			Bukkit.getPluginManager().callEvent(event);
-			match.stop();
+			for(Player player : match.getPlayers()) {
+				matchManager.leave(player);
+			}
 		}
 	}
 

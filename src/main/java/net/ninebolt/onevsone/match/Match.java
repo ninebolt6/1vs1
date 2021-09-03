@@ -32,6 +32,10 @@ public class Match {
 	 */
 	public Match(Arena arena) {
 		this.arena = arena;
+		initMatch();
+	}
+
+	public void initMatch() {
 		this.players = new Player[2];
 		this.state = MatchState.WAITING;
 
@@ -229,21 +233,6 @@ public class Match {
 	}
 
 	/**
-	 * マッチを停止します。プレイヤーは参加直前に居た状態(インベントリ、位置)に戻ります。
-	 * @see #removePlayer(Player)
-	 */
-	public void stop() {
-		// call event
-		for(Player player : players) {
-			if(player != null) {
-				removePlayer(player);
-			}
-		}
-		state = MatchState.WAITING;
-		data = new MatchData();
-	}
-
-	/**
 	 * 次のラウンドを開始します。最後のラウンドが終わり呼び出された場合には、
 	 * {@link #stop()}が呼び出されマッチが終了します。
 	 */
@@ -254,14 +243,12 @@ public class Match {
 
 			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
 			Bukkit.getPluginManager().callEvent(event);
-			stop();
 			return;
 		} else if(getMatchData().getKill(players[1]) >= FIRST_TO) {
 			getMatchData().setWinner(players[1]);
 
 			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
 			Bukkit.getPluginManager().callEvent(event);
-			stop();
 			return;
 		}
 
