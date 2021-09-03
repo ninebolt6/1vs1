@@ -250,11 +250,15 @@ public class Match {
 	public void startNextRound() {
 		// 終了判定
 		if(getMatchData().getKill(players[0]) >= FIRST_TO) {
+			getMatchData().setWinner(players[0]);
+
 			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
 			Bukkit.getPluginManager().callEvent(event);
 			stop();
 			return;
 		} else if(getMatchData().getKill(players[1]) >= FIRST_TO) {
+			getMatchData().setWinner(players[1]);
+
 			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
 			Bukkit.getPluginManager().callEvent(event);
 			stop();
