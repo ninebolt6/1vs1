@@ -154,8 +154,8 @@ public class Match {
 	 * プレイヤーがMatchに参加できるかどうかを返します。
 	 * @return Arenaが有効で、かつMatchStateが待機中の場合{@code true}。それ以外は{@code false}
 	 */
-	public boolean isJoinable() {
-		return (arena.isEnabled() && state.equals(MatchState.WAITING));
+	public boolean canJoin() {
+		return (arena.isEnabled() && (players[0] == null || players[1] == null) && state.equals(MatchState.WAITING));
 	}
 
 	/**
