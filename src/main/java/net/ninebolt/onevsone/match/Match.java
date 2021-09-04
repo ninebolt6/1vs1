@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
 
 import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
@@ -23,8 +22,6 @@ public class Match {
 	private Player[] players;
 
 	private MatchData data;
-	private Location[] locCache;
-	private PlayerInventory[] invCache;
 
 	/**
 	 * 引数で指定したアリーナを使用するMatchを作成します。
@@ -40,8 +37,6 @@ public class Match {
 		this.state = MatchState.WAITING;
 
 		data = new MatchData();
-		locCache = new Location[2];
-		invCache = new PlayerInventory[2];
 	}
 
 	/**
@@ -93,8 +88,6 @@ public class Match {
 		}
 
 		players[index] = player;
-		invCache[index] = player.getInventory();
-		locCache[index] = player.getLocation();
 	}
 
 	/**
@@ -112,11 +105,6 @@ public class Match {
 			return;
 		}
 
-		players[index].getInventory().clear();
-		players[index].getInventory().setContents(invCache[index].getContents());
-		players[index].getInventory().setArmorContents(invCache[index].getArmorContents());
-		players[index].getInventory().setExtraContents(invCache[index].getExtraContents());
-		players[index].teleport(locCache[index]);
 		players[index] = null;
 	}
 
