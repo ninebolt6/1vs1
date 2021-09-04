@@ -106,8 +106,7 @@ public class Match {
 	 * @param player Matchから削除するプレイヤー
 	 */
 	public void removePlayer(Player player) {
-		// TODO player.equals(players[0])に変更する(この場合null判定はいらない)
-		if(players[0] != null && players[0].equals(player)) {
+		if(player.equals(players[0])) {
 			players[0].getInventory().clear();
 			players[0].getInventory().setContents(invCache[0].getContents());
 			players[0].getInventory().setArmorContents(invCache[0].getArmorContents());
@@ -116,7 +115,7 @@ public class Match {
 			players[0] = null;
 		}
 
-		if(players[1] != null && players[1].equals(player)) {
+		if(player.equals(players[1])) {
 			players[1].getInventory().clear();
 			players[1].getInventory().setContents(invCache[1].getContents());
 			players[1].getInventory().setArmorContents(invCache[1].getArmorContents());
@@ -132,11 +131,11 @@ public class Match {
 	 * @return 相手が存在した場合 {@link org.bukkit.entity.Player}。プレイヤーがMatchに参加していない、もしくは相手が参加していない場合 {@code null}
 	 */
 	public Player getOpponent(Player player) {
-		if(players[0] != null && players[0].equals(player)) {
+		if(player.equals(players[0])) {
 			return players[1];
 		}
 
-		if(players[1] != null && players[1].equals(player)) {
+		if(player.equals(players[1])) {
 			return players[0];
 		}
 		return null;
@@ -148,11 +147,11 @@ public class Match {
 	 * @return {@link Match#PLAYER_ONE}もしくは{@link Match#PLAYER_TWO}。プレイヤーがMatchに参加していない場合 {@code -1}
 	 */
 	public int getPlayerNumber(Player player) {
-		if(players[0].equals(player)) {
+		if(player.equals(players[0])) {
 			return PLAYER_ONE;
 		}
 
-		if(players[1].equals(player)) {
+		if(player.equals(players[1])) {
 			return PLAYER_TWO;
 		}
 
