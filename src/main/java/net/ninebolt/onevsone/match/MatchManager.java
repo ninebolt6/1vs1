@@ -102,6 +102,7 @@ public class MatchManager {
 
 		playerMap.put(player, match);
 		match.addPlayer(player);
+		player.teleport(match.getArena().getArenaSpawn().getLocation(match.getPlayerNumber(player)));
 	}
 
 	/**

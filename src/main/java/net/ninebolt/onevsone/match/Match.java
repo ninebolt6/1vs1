@@ -83,21 +83,18 @@ public class Match {
 	 * @param player Matchに追加するプレイヤー
 	 */
 	public void addPlayer(Player player) {
-		if(players[0] != null && players[1] != null) {
+		int index;
+		if(players[0] == null) {
+			index = 0;
+		} else if(players[1] == null) {
+			index = 1;
+		} else {
 			return;
 		}
 
-		if(players[0] == null) {
-			players[0] = player;
-			invCache[0] = player.getInventory();
-			locCache[0] = player.getLocation();
-			player.teleport(getArena().getArenaSpawn().getLocation(PLAYER_ONE));
-		} else if(players[1] == null) {
-			players[1] = player;
-			invCache[1] = player.getInventory();
-			locCache[1] = player.getLocation();
-			player.teleport(getArena().getArenaSpawn().getLocation(PLAYER_TWO));
-		}
+		players[index] = player;
+		invCache[index] = player.getInventory();
+		locCache[index] = player.getLocation();
 	}
 
 	/**
@@ -106,23 +103,21 @@ public class Match {
 	 * @param player Matchから削除するプレイヤー
 	 */
 	public void removePlayer(Player player) {
+		int index;
 		if(player.equals(players[0])) {
-			players[0].getInventory().clear();
-			players[0].getInventory().setContents(invCache[0].getContents());
-			players[0].getInventory().setArmorContents(invCache[0].getArmorContents());
-			players[0].getInventory().setExtraContents(invCache[0].getExtraContents());
-			players[0].teleport(locCache[0]);
-			players[0] = null;
+			index = 0;
+		} else if(player.equals(players[1])) {
+			index = 1;
+		} else {
+			return;
 		}
 
-		if(player.equals(players[1])) {
-			players[1].getInventory().clear();
-			players[1].getInventory().setContents(invCache[1].getContents());
-			players[1].getInventory().setArmorContents(invCache[1].getArmorContents());
-			players[1].getInventory().setExtraContents(invCache[1].getExtraContents());
-			players[1].teleport(locCache[1]);
-			players[1] = null;
-		}
+		players[index].getInventory().clear();
+		players[index].getInventory().setContents(invCache[index].getContents());
+		players[index].getInventory().setArmorContents(invCache[index].getArmorContents());
+		players[index].getInventory().setExtraContents(invCache[index].getExtraContents());
+		players[index].teleport(locCache[index]);
+		players[index] = null;
 	}
 
 	/**
@@ -138,6 +133,7 @@ public class Match {
 		if(player.equals(players[1])) {
 			return players[0];
 		}
+
 		return null;
 	}
 
