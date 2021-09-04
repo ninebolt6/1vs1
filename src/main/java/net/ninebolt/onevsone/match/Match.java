@@ -151,11 +151,19 @@ public class Match {
 	}
 
 	/**
+	 * Matchが一杯かどうかを返します。
+	 * @return Matchに空きがある場合は{@code true}。それ以外は{@code false}
+	 */
+	public boolean isFull() {
+		return (players[0] != null) && (players[1] != null);
+	}
+
+	/**
 	 * プレイヤーがMatchに参加できるかどうかを返します。
 	 * @return Arenaが有効で、かつMatchStateが待機中の場合{@code true}。それ以外は{@code false}
 	 */
 	public boolean canJoin() {
-		return (arena.isEnabled() && (players[0] == null || players[1] == null) && state.equals(MatchState.WAITING));
+		return arena.isEnabled() && !isFull() && (state == MatchState.WAITING);
 	}
 
 	/**
@@ -163,7 +171,7 @@ public class Match {
 	 * @return {@link MatchState}が{@code WAITING}の状態でプレイヤーが2人揃っている場合は{@code true}。それ以外は{@code false}
 	 */
 	public boolean isReadyToStart() {
-		return (players[0] != null && players[1] != null && getState() == MatchState.WAITING);
+		return isFull() && (state == MatchState.WAITING);
 	}
 
 	/**
@@ -235,6 +243,7 @@ public class Match {
 			return;
 		}
 
+		// TODO: Add 'RoundStartEvent'
 		getMatchData().setRound(getMatchData().getRound()+1);
 		sendMessage("Match " + getMatchData().getRound() + " start!");
 
