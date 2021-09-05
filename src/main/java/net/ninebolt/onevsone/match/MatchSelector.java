@@ -23,6 +23,7 @@ import org.bukkit.persistence.PersistentDataType;
 import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
+import net.ninebolt.onevsone.event.RoundStartEvent;
 import net.ninebolt.onevsone.util.Messages;
 
 public class MatchSelector implements Listener {
@@ -118,7 +119,8 @@ public class MatchSelector implements Listener {
 
 		matchManager.join(player, match);
 		if(match.isReadyToStart()) {
-			match.start();
+			RoundStartEvent startEvent = new RoundStartEvent(match);
+			Bukkit.getPluginManager().callEvent(startEvent);
 		}
 	}
 

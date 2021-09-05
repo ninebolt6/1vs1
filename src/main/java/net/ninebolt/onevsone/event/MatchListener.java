@@ -1,6 +1,9 @@
 package net.ninebolt.onevsone.event;
 
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +20,7 @@ import net.ninebolt.onevsone.match.Match;
 import net.ninebolt.onevsone.match.MatchEndCause;
 import net.ninebolt.onevsone.match.MatchManager;
 import net.ninebolt.onevsone.match.MatchState;
+import net.ninebolt.onevsone.match.MatchTimer;
 import net.ninebolt.onevsone.stats.Stats;
 import net.ninebolt.onevsone.stats.StatsManager;
 
@@ -107,7 +111,8 @@ public class MatchListener implements Listener {
 					Player opponent = match.getOpponent(defender);
 					match.getMatchData().setDeath(defender, match.getMatchData().getDeath(defender)+1);
 					match.getMatchData().setKill(opponent, match.getMatchData().getKill(opponent)+1);
-					match.startNextRound();
+					RoundStartEvent startEvent = new RoundStartEvent(match);
+					Bukkit.getPluginManager().callEvent(startEvent);
 				}
 			}
 		}
@@ -127,9 +132,43 @@ public class MatchListener implements Listener {
 		}
 	}
 
+	/**
+	 * ラウンド開始時に呼び出されるメソッドです。最後のラウンドが終わり呼び出された場合には、
+	 * {@link #stop()}が呼び出されマッチが終了します。
+	 */
 	@EventHandler
-	public void onMatchStart(MatchStartEvent event) {
-		event.getMatch().sendMessage("マッチ開始！");
+	public void onRoundStart(RoundStartEvent event) {
+		Match match = event.getMatch();
+
+		// 終了判定
+		if(match.getMatchData().getKill(match.getPlayers()[0]) >= MatchManager.FIRST_TO) {
+			match.getMatchData().setWinner(match.getPlayers()[0]);
+
+			MatchEndEvent endEvent = new MatchEndEvent(match, MatchEndCause.FINISHED);
+			Bukkit.getPluginManager().callEvent(endEvent);
+			return;
+		} else if(match.getMatchData().getKill(match.getPlayers()[1]) >= MatchManager.FIRST_TO) {
+			match.getMatchData().setWinner(match.getPlayers()[1]);
+
+			MatchEndEvent endEvent = new MatchEndEvent(match, MatchEndCause.FINISHED);
+			Bukkit.getPluginManager().callEvent(endEvent);
+			return;
+		}
+
+		for(Player player : match.getPlayers()) {
+			player.setGameMode(GameMode.SURVIVAL);
+			player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			player.setFoodLevel(20);
+			player.getInventory().clear();
+			player.getInventory().setContents(match.getArena().getInventory().getContents());
+			player.getInventory().setArmorContents(match.getArena().getInventory().getArmorContents());
+			player.getInventory().setExtraContents(match.getArena().getInventory().getExtraContents());
+			player.teleport(match.getArena().getArenaSpawn().getLocation(match.getPlayerNumber(player)));
+		}
+
+		MatchTimer timer = new MatchTimer(match);
+		match.getMatchData().setRound(match.getMatchData().getRound() + 1);
+		timer.getCountdownTimer(3).runTaskTimerAsynchronously(OneVsOne.getInstance(), 0, 20);
 	}
 
 	@EventHandler

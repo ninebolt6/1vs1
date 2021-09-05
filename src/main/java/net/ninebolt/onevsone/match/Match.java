@@ -1,21 +1,14 @@
 package net.ninebolt.onevsone.match;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
-import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
-import net.ninebolt.onevsone.event.MatchEndEvent;
-import net.ninebolt.onevsone.event.MatchStartEvent;
 
 public class Match {
 	public static final int PLAYER_ONE = 1;
 	public static final int PLAYER_TWO = 2;
-	private final int FIRST_TO = 2;
 
 	private Arena arena;
 	private MatchState state;
@@ -197,60 +190,6 @@ public class Match {
 	public void playSound(Sound sound, float volume, float pitch) {
 		for(Player player : players) {
 			player.playSound(player.getLocation(), sound, volume, pitch);
-		}
-	}
-
-	/**
-	 * マッチを開始します。プレイヤーが2人参加していることを{@link #isReadyToStart()}で確認してから開始してください。
-	 */
-	public void start() {
-		// call event
-		MatchStartEvent event = new MatchStartEvent(this);
-		Bukkit.getPluginManager().callEvent(event);
-
-		for(Player player : players) {
-			player.getInventory().clear();
-			player.getInventory().setContents(getArena().getInventory().getContents());
-			player.getInventory().setArmorContents(getArena().getInventory().getArmorContents());
-			player.getInventory().setExtraContents(getArena().getInventory().getExtraContents());
-			player.setGameMode(GameMode.SURVIVAL);
-			getMatchData().initData(player);
-		}
-
-		MatchTimer timer = new MatchTimer(this);
-		timer.getCountdownTimer(3).runTaskTimerAsynchronously(OneVsOne.getInstance(), 0, 20);
-		state = MatchState.INGAME;
-		getMatchData().setRound(1);
-	}
-
-	/**
-	 * 次のラウンドを開始します。最後のラウンドが終わり呼び出された場合には、
-	 * {@link #stop()}が呼び出されマッチが終了します。
-	 */
-	public void startNextRound() {
-		// 終了判定
-		if(getMatchData().getKill(players[0]) >= FIRST_TO) {
-			getMatchData().setWinner(players[0]);
-
-			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
-			Bukkit.getPluginManager().callEvent(event);
-			return;
-		} else if(getMatchData().getKill(players[1]) >= FIRST_TO) {
-			getMatchData().setWinner(players[1]);
-
-			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
-			Bukkit.getPluginManager().callEvent(event);
-			return;
-		}
-
-		// TODO: Add 'RoundStartEvent'
-		getMatchData().setRound(getMatchData().getRound()+1);
-		sendMessage("Match " + getMatchData().getRound() + " start!");
-
-		for(Player player : players) {
-			player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-			// set inventory
-			player.teleport(getArena().getArenaSpawn().getLocation(getPlayerNumber(player)));
 		}
 	}
 }

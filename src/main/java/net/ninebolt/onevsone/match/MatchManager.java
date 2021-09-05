@@ -24,6 +24,8 @@ public class MatchManager {
 	private static Map<Player, PlayerInventory> invCache;
 	private static Map<Player, GameMode> gmCache;
 
+	public static final int FIRST_TO = 2;
+
 	/**
 	 * MatchManagerのインスタンスを作成します。
 	 * 外部からのインスタンス取得には{@link #getInstance()}を使用してください。
@@ -34,6 +36,7 @@ public class MatchManager {
 		playerMap = new HashMap<Player, Match>();
 		locCache = new HashMap<Player, Location>();
 		invCache = new HashMap<Player, PlayerInventory>();
+		gmCache = new HashMap<Player, GameMode>();
 		initMatches();
 	}
 
@@ -113,6 +116,8 @@ public class MatchManager {
 		locCache.put(player, player.getLocation());
 		invCache.put(player, player.getInventory());
 		gmCache.put(player, player.getGameMode());
+		match.getMatchData().initData(player);
+		player.setGameMode(GameMode.SURVIVAL);
 		player.teleport(match.getArena().getArenaSpawn().getLocation(match.getPlayerNumber(player)));
 	}
 
