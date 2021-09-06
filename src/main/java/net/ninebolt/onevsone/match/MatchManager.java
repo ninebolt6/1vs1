@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 
 import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
@@ -17,6 +20,11 @@ public class MatchManager {
 
 	private static List<Match> matches;
 	private static Map<Player, Match> playerMap;
+	private static Map<Player, Location> locCache;
+	private static Map<Player, PlayerInventory> invCache;
+	private static Map<Player, GameMode> gmCache;
+
+	public static final int FIRST_TO = 2;
 
 	/**
 	 * MatchManagerのインスタンスを作成します。
@@ -26,6 +34,9 @@ public class MatchManager {
 	private MatchManager() {
 		matches = new ArrayList<Match>();
 		playerMap = new HashMap<Player, Match>();
+		locCache = new HashMap<Player, Location>();
+		invCache = new HashMap<Player, PlayerInventory>();
+		gmCache = new HashMap<Player, GameMode>();
 		initMatches();
 	}
 
@@ -102,6 +113,12 @@ public class MatchManager {
 
 		playerMap.put(player, match);
 		match.addPlayer(player);
+		locCache.put(player, player.getLocation());
+		invCache.put(player, player.getInventory());
+		gmCache.put(player, player.getGameMode());
+		match.getMatchData().initData(player);
+		player.setGameMode(GameMode.SURVIVAL);
+		player.teleport(match.getArena().getArenaSpawn().getLocation(match.getPlayerNumber(player)));
 	}
 
 	/**
@@ -115,5 +132,11 @@ public class MatchManager {
 
 		getMatch(player).removePlayer(player);
 		playerMap.remove(player);
+		player.getInventory().clear();
+		player.getInventory().setContents(invCache.get(player).getContents());
+		player.getInventory().setArmorContents(invCache.get(player).getArmorContents());
+		player.getInventory().setExtraContents(invCache.get(player).getExtraContents());
+		player.setGameMode(gmCache.get(player));
+		player.teleport(locCache.get(player));
 	}
 }

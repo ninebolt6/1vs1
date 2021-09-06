@@ -1,30 +1,20 @@
 package net.ninebolt.onevsone.match;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
 
-import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
-import net.ninebolt.onevsone.event.MatchEndEvent;
-import net.ninebolt.onevsone.event.MatchStartEvent;
 
 public class Match {
 	public static final int PLAYER_ONE = 1;
 	public static final int PLAYER_TWO = 2;
-	private final int FIRST_TO = 2;
 
 	private Arena arena;
 	private MatchState state;
 	private Player[] players;
 
 	private MatchData data;
-	private Location[] locCache;
-	private PlayerInventory[] invCache;
 
 	/**
 	 * 引数で指定したアリーナを使用するMatchを作成します。
@@ -40,8 +30,6 @@ public class Match {
 		this.state = MatchState.WAITING;
 
 		data = new MatchData();
-		locCache = new Location[2];
-		invCache = new PlayerInventory[2];
 	}
 
 	/**
@@ -83,21 +71,16 @@ public class Match {
 	 * @param player Matchに追加するプレイヤー
 	 */
 	public void addPlayer(Player player) {
-		if(players[0] != null && players[1] != null) {
+		int index;
+		if(players[0] == null) {
+			index = 0;
+		} else if(players[1] == null) {
+			index = 1;
+		} else {
 			return;
 		}
 
-		if(players[0] == null) {
-			players[0] = player;
-			invCache[0] = player.getInventory();
-			locCache[0] = player.getLocation();
-			player.teleport(getArena().getArenaSpawn().getLocation(PLAYER_ONE));
-		} else if(players[1] == null) {
-			players[1] = player;
-			invCache[1] = player.getInventory();
-			locCache[1] = player.getLocation();
-			player.teleport(getArena().getArenaSpawn().getLocation(PLAYER_TWO));
-		}
+		players[index] = player;
 	}
 
 	/**
@@ -106,23 +89,16 @@ public class Match {
 	 * @param player Matchから削除するプレイヤー
 	 */
 	public void removePlayer(Player player) {
+		int index;
 		if(player.equals(players[0])) {
-			players[0].getInventory().clear();
-			players[0].getInventory().setContents(invCache[0].getContents());
-			players[0].getInventory().setArmorContents(invCache[0].getArmorContents());
-			players[0].getInventory().setExtraContents(invCache[0].getExtraContents());
-			players[0].teleport(locCache[0]);
-			players[0] = null;
+			index = 0;
+		} else if(player.equals(players[1])) {
+			index = 1;
+		} else {
+			return;
 		}
 
-		if(player.equals(players[1])) {
-			players[1].getInventory().clear();
-			players[1].getInventory().setContents(invCache[1].getContents());
-			players[1].getInventory().setArmorContents(invCache[1].getArmorContents());
-			players[1].getInventory().setExtraContents(invCache[1].getExtraContents());
-			players[1].teleport(locCache[1]);
-			players[1] = null;
-		}
+		players[index] = null;
 	}
 
 	/**
@@ -138,6 +114,7 @@ public class Match {
 		if(player.equals(players[1])) {
 			return players[0];
 		}
+
 		return null;
 	}
 
@@ -167,11 +144,19 @@ public class Match {
 	}
 
 	/**
+	 * Matchが一杯かどうかを返します。
+	 * @return Matchに空きがある場合は{@code true}。それ以外は{@code false}
+	 */
+	public boolean isFull() {
+		return (players[0] != null) && (players[1] != null);
+	}
+
+	/**
 	 * プレイヤーがMatchに参加できるかどうかを返します。
 	 * @return Arenaが有効で、かつMatchStateが待機中の場合{@code true}。それ以外は{@code false}
 	 */
-	public boolean isJoinable() {
-		return (arena.isEnabled() && state.equals(MatchState.WAITING));
+	public boolean canJoin() {
+		return arena.isEnabled() && !isFull() && (state == MatchState.WAITING);
 	}
 
 	/**
@@ -179,7 +164,7 @@ public class Match {
 	 * @return {@link MatchState}が{@code WAITING}の状態でプレイヤーが2人揃っている場合は{@code true}。それ以外は{@code false}
 	 */
 	public boolean isReadyToStart() {
-		return (players[0] != null && players[1] != null && getState() == MatchState.WAITING);
+		return isFull() && (state == MatchState.WAITING);
 	}
 
 	/**
@@ -205,59 +190,6 @@ public class Match {
 	public void playSound(Sound sound, float volume, float pitch) {
 		for(Player player : players) {
 			player.playSound(player.getLocation(), sound, volume, pitch);
-		}
-	}
-
-	/**
-	 * マッチを開始します。プレイヤーが2人参加していることを{@link #isReadyToStart()}で確認してから開始してください。
-	 */
-	public void start() {
-		// call event
-		MatchStartEvent event = new MatchStartEvent(this);
-		Bukkit.getPluginManager().callEvent(event);
-
-		for(Player player : players) {
-			player.getInventory().clear();
-			player.getInventory().setContents(getArena().getInventory().getContents());
-			player.getInventory().setArmorContents(getArena().getInventory().getArmorContents());
-			player.getInventory().setExtraContents(getArena().getInventory().getExtraContents());
-			player.setGameMode(GameMode.SURVIVAL);
-			getMatchData().initData(player);
-		}
-
-		MatchTimer timer = new MatchTimer(this);
-		timer.getCountdownTimer(3).runTaskTimerAsynchronously(OneVsOne.getInstance(), 0, 20);
-		state = MatchState.INGAME;
-		getMatchData().setRound(1);
-	}
-
-	/**
-	 * 次のラウンドを開始します。最後のラウンドが終わり呼び出された場合には、
-	 * {@link #stop()}が呼び出されマッチが終了します。
-	 */
-	public void startNextRound() {
-		// 終了判定
-		if(getMatchData().getKill(players[0]) >= FIRST_TO) {
-			getMatchData().setWinner(players[0]);
-
-			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
-			Bukkit.getPluginManager().callEvent(event);
-			return;
-		} else if(getMatchData().getKill(players[1]) >= FIRST_TO) {
-			getMatchData().setWinner(players[1]);
-
-			MatchEndEvent event = new MatchEndEvent(this, MatchEndCause.FINISHED);
-			Bukkit.getPluginManager().callEvent(event);
-			return;
-		}
-
-		getMatchData().setRound(getMatchData().getRound()+1);
-		sendMessage("Match " + getMatchData().getRound() + " start!");
-
-		for(Player player : players) {
-			player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-			// set inventory
-			player.teleport(getArena().getArenaSpawn().getLocation(getPlayerNumber(player)));
 		}
 	}
 }

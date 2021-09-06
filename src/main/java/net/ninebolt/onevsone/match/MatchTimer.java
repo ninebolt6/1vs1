@@ -51,9 +51,11 @@ class MatchCountdown extends BukkitRunnable {
 	 */
 	@Override
 	public void run() {
+		match.setState(MatchState.COUNTDOWN);
 		if(counter == 0) {
 			match.playSound(Sound.BLOCK_BELL_USE, 3.0f, 2.0f);
 			match.sendMessage(Messages.roundStart());
+			match.setState(MatchState.INGAME);
 			this.cancel();
 		} else {
 			match.playSound(Sound.UI_BUTTON_CLICK, 3.0f, 1.0f);

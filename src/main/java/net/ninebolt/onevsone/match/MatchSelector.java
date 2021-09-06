@@ -23,6 +23,7 @@ import org.bukkit.persistence.PersistentDataType;
 import net.ninebolt.onevsone.OneVsOne;
 import net.ninebolt.onevsone.arena.Arena;
 import net.ninebolt.onevsone.arena.ArenaManager;
+import net.ninebolt.onevsone.event.RoundStartEvent;
 import net.ninebolt.onevsone.util.Messages;
 
 public class MatchSelector implements Listener {
@@ -46,7 +47,7 @@ public class MatchSelector implements Listener {
 		for(Match match : matchManager.getMatches()) {
 			ItemStack arenaItem;
 			Arena arena = match.getArena();
-			if(match.isJoinable()) {
+			if(match.canJoin()) {
 				arenaItem = createItem(Material.GREEN_WOOL, arena.getDisplayName(), "参加可能", match.getState().toString());
 			} else {
 				arenaItem = createItem(Material.RED_WOOL, arena.getDisplayName(), "参加不可", match.getState().toString());
@@ -118,7 +119,8 @@ public class MatchSelector implements Listener {
 
 		matchManager.join(player, match);
 		if(match.isReadyToStart()) {
-			match.start();
+			RoundStartEvent startEvent = new RoundStartEvent(match);
+			Bukkit.getPluginManager().callEvent(startEvent);
 		}
 	}
 

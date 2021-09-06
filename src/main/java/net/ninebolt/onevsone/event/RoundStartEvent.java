@@ -5,12 +5,12 @@ import org.bukkit.event.HandlerList;
 
 import net.ninebolt.onevsone.match.Match;
 
-public class MatchStartEvent extends Event {
+public class RoundStartEvent extends Event {
 
 	private Match match;
 	private static final HandlerList HANDLERS = new HandlerList();
 
-	public MatchStartEvent(Match match) {
+	public RoundStartEvent(Match match) {
 		this.match = match;
 	}
 
