@@ -3,7 +3,7 @@
 
   <groupId>net.ninebolt.onevsone</groupId>
   <artifactId>1vs1</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.0-alpha.1</version>
 
   <name>1vs1</name>
   <description>1vs1 plugin for spigot</description>
